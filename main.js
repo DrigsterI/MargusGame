@@ -43,12 +43,18 @@ class Player {
 			this.Move(this.speed);
 		} else if (keys['KeyA']){
 			this.Move(this.speed * (-1));
-		}
+		} /*else if (debug){
+			if (keys['KeyS']){ //only for debug (collision) (ZAK)
+				this.VelocityY = this.jumpForce;
+			}
+		}*/
+		
 		this.y += this.VelocityY;
 		this.x += this.VelocityX;
 
 		this.CheckCollisions();
 
+		
 		// Gravity
 		if (this.y + this.height < canvas.height) {
 			this.VelocityY += gravity;
@@ -83,6 +89,41 @@ class Player {
 	CheckCollisions () {
 		for (let i = 0; i < obstacles.length; i++) {
 			let obstacle = obstacles[i];
+			
+			//левый верхний угол
+			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width &&
+				this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height)
+			{
+				this.x = 200;
+				this.y = 200;
+			}
+			
+			//правый верхний угол
+			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width &&
+				this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height)
+			{
+				this.x = 200;
+				this.y = 200;
+			}
+			
+			//левый нижний угол 
+			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width &&
+				this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height)
+
+			{
+				this.x = 1200;
+				this.y = 200;
+			}
+			
+			//правый нижний угол
+			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width &&
+				this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height)
+			{
+				this.x = 200;
+				this.y = 200;
+			}
+			
+			
 		}
 	}
 
@@ -95,6 +136,7 @@ class Player {
 			this.VelocityY = -this.jumpForce;
 		}
 	}
+	
 
 	Draw () {
 		ctx.beginPath();
@@ -146,11 +188,11 @@ function Start () {
 	canvas.height = window.innerHeight;
 
 	ctx.font = "20px sans-serif";
-	gravity = 0.2;
+	gravity = 0.2; 
 
 	player = new Player(1000, 0, 50, 50, '#FF5858');
 
-	box = new Obstacle(500, 900, 10, 100, '#666');
+	box = new Obstacle(500, 800, 50, 50, '#666');
 	obstacles.push(box);
 
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
