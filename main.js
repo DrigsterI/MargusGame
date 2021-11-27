@@ -7,6 +7,7 @@ let debug = true;
 let player;
 let gravity;
 let keys = {};
+let obstacles = [];
 
 let VelocityText;
 
@@ -46,6 +47,8 @@ class Player {
 		this.y += this.VelocityY;
 		this.x += this.VelocityX;
 
+		this.CheckCollisions();
+
 		// Gravity
 		if (this.y + this.height < canvas.height) {
 			this.VelocityY += gravity;
@@ -58,7 +61,7 @@ class Player {
 
 		this.x += this.VelocityX;
 
-		if (this.x + this.width < canvas.width && this.x > 0 && this.grounded) {
+		if (this.x + this.width < canvas.width && this.x > 0) {
 			if (this.VelocityX > 0) {
 				this.VelocityX -= 0.5;
 			}else if (this.VelocityX < 0) {
@@ -77,10 +80,14 @@ class Player {
 		this.Draw();
 	}
 
-	Move (speed, left) {
-		if (this.grounded) {
-			this.VelocityX = speed;
+	CheckCollisions () {
+		for (let i = 0; i < obstacles.length; i++) {
+			let obstacle = obstacles[i];
 		}
+	}
+
+	Move (speed) {
+		this.VelocityX = speed;
 	}
 
 	Jump () {
@@ -89,6 +96,23 @@ class Player {
 		}
 	}
 
+	Draw () {
+		ctx.beginPath();
+		ctx.fillStyle = this.color;
+		ctx.fillRect(this.x, this.y, this.width, this.height);
+		ctx.closePath();
+	}
+}
+
+class Obstacle {
+	constructor (x, y, width, height, color) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.color = color;
+	}
+  
 	Draw () {
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
@@ -126,6 +150,9 @@ function Start () {
 
 	player = new Player(1000, 0, 50, 50, '#FF5858');
 
+	box = new Obstacle(500, 900, 10, 100, '#666');
+	obstacles.push(box);
+
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
 
@@ -136,6 +163,11 @@ function Update () {
 	requestAnimationFrame(Update);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+	for (let i = 0; i < obstacles.length; i++) {
+		let obstacle = obstacles[i];
+
+		obstacle.Draw();
+	}
 	player.Animate();
 
 	if (debug) {
@@ -145,7 +177,6 @@ function Update () {
 		PosText.t = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
 	}
-	setTimeout(null, 1000/60);
 }
 
 Start();
