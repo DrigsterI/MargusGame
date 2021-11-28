@@ -29,7 +29,7 @@ class Player {
 
 		this.VelocityX = 0;
 		this.VelocityY = 0;
-		this.jumpForce = 10;
+		this.jumpForce = 8;
 		this.speed = 1.5;
 		this.grounded = false;
 		this.jumpTimer = 0;
@@ -94,39 +94,143 @@ class Player {
 			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width &&
 				this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height)
 			{
-				this.x = 200;
-				this.y = 200;
+				//this.x = 200;
+				//this.y = 200;
+				this.CheckPart(obstacle);
 			}
 			
 			//правый верхний угол
 			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width &&
 				this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height)
 			{
-				this.x = 200;
-				this.y = 200;
+				//this.x = 200;
+				//this.y = 200;
+				this.CheckPart(obstacle);
 			}
 			
 			//левый нижний угол 
 			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width &&
 				this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height)
-
 			{
-				this.x = 1200;
-				this.y = 200;
+				//this.x = 1200;
+				//this.y = 200;
+				this.CheckPart(obstacle);
 			}
 			
 			//правый нижний угол
 			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width &&
 				this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height)
 			{
-				this.x = 200;
-				this.y = 200;
+				//this.x = 200;
+				//this.y = 200;
+				this.CheckPart(obstacle);
 			}
-			
-			
 		}
 	}
+	
+	
+	CheckPart (obstacle) {
+		
+		let x;
+		let y;
+		
+		// 1 четверть
+		if (this.x >= obstacle.width / 2 && this.y + this.height <= obstacle.height / 2)
+		{
+			x = (obstacle.x + obstacle.width) - this.x;
+			y = this.y - obstacle.y;			
+			if (x > y)
+			{
+				//this.x += x;
+				//this.x = obstacle.x + obstacle.width;
+			}
+			else 
+			{
+				//this.y += y;
+				//this.y = obstacle.y - this.height;
+				this.y = obstacle.y + this.height;
+			}
+			console.log("1");
+		}
 
+		// 2 четверть
+		if (this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2))
+		{
+			x = this.x - obstacle.x;
+			y = this.y - obstacle.y;
+			if (x > y)
+			{
+				//this.x -= x;
+				this.x = obstacle.x - this.width;
+			}
+			else 
+			{
+				//this.y += y;
+				this.y = obstacle.y - this.height-100;
+				//this.y = obstacle.y + this.height;
+			}
+			console.log("2");
+		}
+
+
+		// 3 четверть
+		if (this.x + this.width <= obstacle.width / 2 && this.y >= ((obstacle.y) + obstacle.height / 2) || 
+			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2))
+		{
+			x = this.x - obstacle.x;
+			y = (obstacle.y + obstacle.height) - this.y;
+			if (x > y)
+			{
+				//this.x += x;
+				this.x = obstacle.x - this.width;
+			}
+			else 
+			{
+				//this.y -= y;
+				this.y = obstacle.y - this.height;
+				
+			}
+				//console.log(this.x);
+				//console.log(this.y);
+				//console.log(" ");
+				//console.log("ok");
+				console.log("3");
+		}
+
+
+
+		// 4 четверть
+		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2))
+		{
+			x = (obstacle.x + obstacle.width) - this.x;
+			y = (obstacle.y + obstacle.height) - this.y;
+			if (x < y)
+			{
+				//console.log("ok");
+				//this.x -= x;
+				this.x = obstacle.x + obstacle.width;
+			}
+			else 
+			{
+				//this.y -= y;
+				this.y = obstacle.y + this.height;
+			}
+			console.log("4");
+		}
+		
+		//console.log(x);
+		//console.log(y);
+		//console.log(" ");
+		console.log(this.x);
+		console.log(this.y);
+		console.log(" ");
+		
+	}
+	
+	
+	
+	
+	
 	Move (speed) {
 		this.VelocityX = speed;
 	}
@@ -190,7 +294,7 @@ function Start () {
 	ctx.font = "20px sans-serif";
 	gravity = 0.2; 
 
-	player = new Player(1000, 0, 50, 50, '#FF5858');
+	player = new Player(400, 800, 50, 50, '#FF5858');
 
 	box = new Obstacle(500, 800, 50, 50, '#666');
 	obstacles.push(box);
