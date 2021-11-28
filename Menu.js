@@ -14,4 +14,5 @@ function BackToMenu() {
   document.getElementById('game').style.visibility = 'hidden';
   document.getElementById('game').style.width = "60%";
   document.getElementById('BackToMenuButton').style.visibility = 'hidden';
+  Stop();
 }

@@ -314,6 +314,11 @@ function Start () {
 	requestAnimationFrame(Update);
 }
 
+function Stop() {
+	objects = [];
+	cancelAnimationFrame(Update);
+}
+
 function Update () {
 	requestAnimationFrame(Update);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
