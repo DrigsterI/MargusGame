@@ -19,7 +19,7 @@ document.addEventListener('keyup', function (evt) {
 	keys[evt.code] = false;
 });
 
-class Player {
+class Object {
 	constructor (x, y, width, height, color) {
 		this.x = x;
 		this.y = y;
@@ -29,10 +29,61 @@ class Player {
 
 		this.VelocityX = 0;
 		this.VelocityY = 0;
+	}
+	
+	Animate () {
+/*
+		// Keys check
+		if (keys['Space'] || keys['KeyW']) {
+			this.Jump();
+		}
+		if (keys['KeyD']) {
+			this.Move(this.speed);
+		} else if (keys['KeyA']){
+			this.Move(this.speed * (-1));
+		}
+*/
+		//Physics calculation
+		this.grounded = false; // !
+		this.y += this.VelocityY;
+		this.x += this.VelocityX;
+
+		for (let i = 0; i < obstacles.length; i++) {
+			let obstacle = obstacles[i];
+			if (this.CheckCollision(player, obstacle)) {
+				this.CheckPart(obstacle); // !
+			}
+		}
+
+		// Gravity
+		if (!this.grounded){ // !
+			this.VelocityY += gravity;
+		} else {
+			if (this.VelocityX > 0) {
+				this.VelocityX -= 0.5;
+			}else if (this.VelocityX < 0) {
+				this.VelocityX += 0.5;
+			}
+			this.VelocityY = 0;
+		}
+		/*
+		if (player.y > 5000){ // !
+			player.y = -500;
+		}
+		*/
+		this.Draw(); // !
+	}
+}
+
+
+class Player extends Object {
+	constructor (x, y, width, height, color) {
+		super(x, y, width, height, color);
+		
 		this.jumpForce = 8;
-		this.speed = 1.5;
 		this.grounded = false;
-		this.jumpTimer = 0;
+		
+		this.health = 100;
 	}
 
 	Animate () {
