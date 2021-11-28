@@ -123,11 +123,11 @@ class Player {
 		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
 			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
 			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)){
-				x = -(((obstacle.x) + obstacle.width / 2) - this.x);
-				y = ((obstacle.y) + obstacle.height / 2) - (this.y + this.height);	
+				x = ((obstacle.x) + obstacle.width) - this.x;
+				y = (this.y + this.height) - ((obstacle.y));	
 			
-				if (x > y){
-					this.x = obstacle.x + obstacle.width+1;
+				if (x < y){
+					this.x = obstacle.x + obstacle.width;
 				}
 				else {
 					this.y = obstacle.y - this.height;
@@ -149,7 +149,9 @@ class Player {
 				}
 				else {
 					this.y = obstacle.y - this.height;
-				}
+					this.VelocityX = 0;
+					this.VelocityY = 0;
+				}   
 			}
 		
 
@@ -187,6 +189,11 @@ class Player {
 				//this.VelocityX = 0; //фича
 				//this.VelocityY = 0;
 			}
+			
+			console.log("x - " + x);
+			console.log("y - " + y);
+			console.log(this.x);
+			
 		}
 	
 	
@@ -258,9 +265,9 @@ function Start () {
 
 	player = new Player(400, 800, 50, 50, '#FF5858');
 
-	box = new Obstacle(700, 800, 20, 50, '#666');
-	box1 = new Obstacle(500, 800, 50, 50, '#666');
-	obstacles.push(box);
+	//box = new Obstacle(700, 800, 20, 50, '#666');
+	box1 = new Obstacle(100, 800, 500, 50, '#666');
+	//obstacles.push(box);
 	obstacles.push(box1);
 
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
