@@ -52,9 +52,13 @@ class Player {
 		this.y += this.VelocityY;
 		this.x += this.VelocityX;
 
-		this.CheckCollisions();
-
-		
+		for (let i = 0; i < obstacles.length; i++) {
+			let obstacle = obstacles[i];
+			if (this.CheckCollision(player, obstacle)) {
+				this.x = 200;
+				this.y = 200;
+			}
+		}
 		// Gravity
 		if (this.y + this.height < canvas.height) {
 			this.VelocityY += gravity;
@@ -86,45 +90,20 @@ class Player {
 		this.Draw();
 	}
 
-	CheckCollisions () {
-		for (let i = 0; i < obstacles.length; i++) {
-			let obstacle = obstacles[i];
-			
-			//левый верхний угол
-			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width &&
-				this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height)
-			{
-				this.x = 200;
-				this.y = 200;
-			}
-			
-			//правый верхний угол
-			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width &&
-				this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height)
-			{
-				this.x = 200;
-				this.y = 200;
-			}
-			
-			//левый нижний угол 
-			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width &&
-				this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height)
-
-			{
-				this.x = 1200;
-				this.y = 200;
-			}
-			
-			//правый нижний угол
-			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width &&
-				this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height)
-			{
-				this.x = 200;
-				this.y = 200;
-			}
-			
-			
+	CheckCollision (obj1, obj2) {
+		if (obj1.x > obj2.x + obj2.width) {
+			return false;
 		}
+		if (obj1.x + obj1.width < obj2.x) {
+			return false;
+		}
+		if (obj1.y > obj2.y + obj2.height) {
+			return false;
+		}
+		if (obj1.y + obj1.height < obj2.y) {
+			return false;
+		}
+		return true;
 	}
 
 	Move (speed) {
@@ -194,6 +173,9 @@ function Start () {
 
 	box = new Obstacle(500, 800, 50, 50, '#666');
 	obstacles.push(box);
+
+	box2 = new Obstacle(700, 800, 10, 100, '#666');
+	obstacles.push(box2);
 
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
