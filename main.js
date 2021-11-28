@@ -113,7 +113,7 @@ class Object {
 			y = (this.y + this. height) - obstacle.y;
 			
 			if (x < y){
-				this.x = obstacle.x - this.width-1;
+				this.x = obstacle.x - this.width;
 			}
 			else {
 				this.y = obstacle.y - this.height;
