@@ -37,33 +37,45 @@ class Object {
 
 		this.velocityX = 0;
 		this.velocityY = 0;
+		this.friction = 0.5;
 		this.grounded = false;
 	}
 	
 	Animate () {
 		//Physics calculation
 		if (this.movable) {
+			this.velocityX = Math.round((this.velocityX + Number.EPSILON) * 10) / 10
 			this.grounded = false;
 			this.y += this.velocityY;
 			this.x += this.velocityX;
 		}
-		if (this.collidable) {
+		if (this.collidable && this.movable) {
 			for (let i = 0; i < objects.length; i++) {
 				let object = objects[i];
-				if (this.CheckCollision(this, object) && object.collidable) {
-					this.CheckPart(object);
-					
+				if (object != this) {
+					if (this.CheckCollision(this, object) && object.collidable) {
+						this.CheckPart(object);
+					}
 				}
 			}
 		}
 		if (this.movable) {
 			if (!this.grounded){
 				this.velocityY += gravity;
+				if (this.velocityX > this.friction / 5) {
+					this.velocityX -= this.friction / 5;
+				}else if (this.velocityX < -this.friction / 5) {
+					this.velocityX += this.friction / 5;
+				} else {
+					this.velocityX = 0;
+				}
 			} else {
-				if (this.velocityX > 0) {
-					this.velocityX -= 0.5;
-				}else if (this.velocityX < 0) {
-					this.velocityX += 0.5;
+				if (this.velocityX > this.friction) {
+					this.velocityX -= this.friction;
+				}else if (this.velocityX < -this.friction) {
+					this.velocityX += this.friction;
+				}else{
+					this.velocityX = 0;
 				}
 				this.velocityY = 0;
 			}
@@ -101,6 +113,7 @@ class Object {
 		
 			if (x < y){
 				this.x = object.x + object.width;
+				this.velocityX = 0;
 			}
 			else {
 				this.y = object.y - this.height;
@@ -118,6 +131,7 @@ class Object {
 			
 			if (x < y){
 				this.x = object.x - this.width;
+				this.velocityX = 0;
 			}
 			else {
 				this.y = object.y - this.height;
@@ -135,6 +149,7 @@ class Object {
 			
 			if (x < y){
 				this.x = object.x - this.width;
+				this.velocityX = 0;
 			}
 			else {
 				this.y = (object.y + object.height);
@@ -151,6 +166,7 @@ class Object {
 			
 			if (x < y) {
 				this.x = object.x + object.width;
+				this.velocityX = 0;
 			}
 			else {
 				this.y = object.y + this.height; // mb bug
@@ -211,8 +227,7 @@ class Coin extends Object {
 	constructor (x, y, width, height, color) {
 		super(x, y, width, height, color);
 		this.exists = true;
-		super.collidable = false;
-		
+		this.collidable = false;
 	}
 	
 	Pick () {
@@ -224,20 +239,15 @@ class Coin extends Object {
 	Animate() {
 		super.Animate();
 		for (let i = 0; i < objects.length; i++) {
-				let object = objects[i];
-				if (this.CheckCollision(this, object)) {
-					if (typeof(object) == Player){
-						coin.pick();
-					}
-					
+			let object = objects[i];
+			if (object != this) {
+				if (this.CheckCollision(this, object) && object.collidable) {
+					this.Pick();
 				}
 			}
-			
+		}
 	}
 }
-
-
-
 
 class Text {
 		constructor (t, x, y, a, c, s) {
@@ -274,6 +284,7 @@ function Start () {
 	gravity = 0.2; 
 
 	player = new Player(400, 800, 50, 100, '#FF5858');
+	objects.push(player);
 
 	box1 = new Object(0, canvas.height - 10, canvas.width, 20, '#666');
 	objects.push(box1);
@@ -284,9 +295,8 @@ function Start () {
 	box2 = new Object(700, 760, 10, 100, '#666');
 	objects.push(box2);
 	
-	coin1 = new Coin (600, 700, 10, 10, '#ECFF00');
+	coin1 = new Coin (600, 800, 10, 10, '#ECFF00');
 	objects.push(coin1);
-	
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
@@ -302,18 +312,13 @@ function Update () {
 	for (let i = 0; i < objects.length; i++) {
 		let object = objects[i];
 
-		object.Draw();
+		object.Animate();
 	}
-	/*for (let i = 0; i < coinsInGame.length; i++) {
-		let coin = coinsInGame[i];
-
-		coin.Draw();
-	}*/
-	player.Animate();
 
 	if (debug) {
 		
 		VelocityText.t = "Velocity: " + player.velocityX + ", " + player.velocityY;
+		console.log(player.velocityX);
 		VelocityText.Draw();
 		PosText.t = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
