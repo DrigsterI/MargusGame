@@ -171,7 +171,7 @@ class Object {
 				this.velocityX = 0;
 			}
 			else {
-				this.y = object.y + this.height; // mb bug
+				this.y = (object.y + object.height); // mb bug
 			}
 		}
 	}
@@ -406,7 +406,7 @@ function Start () {
 
 	map = new Map("map1");
 
-	player = new Player(400, 800, 50, 100, '#FF5858');
+	player = new Player(900, 650, 50, 50, '#FF5858');
 	objects.push(player);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
