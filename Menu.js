@@ -5,6 +5,7 @@ function StartGame() {
   document.getElementById('game').style.visibility = 'visible';
   document.getElementById('game').style.width = "100%";
   document.getElementById('BackToMenuButton').style.visibility = 'visible';
+  Start();
 }
 function BackToMenu() {
   document.getElementById('StartButton').style.visibility = 'visible';
