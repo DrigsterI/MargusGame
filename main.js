@@ -48,18 +48,16 @@ class Object {
 			this.grounded = false;
 			this.y += this.velocityY;
 			this.x += this.velocityX;
-		}
-		if (this.collidable && this.movable) {
-			for (let i = 0; i < objects.length; i++) {
-				let object = objects[i];
-				if (object != this) {
-					if (this.CheckCollision(this, object) && object.collidable) {
-						this.CheckPart(object);
+			if (this.collidable) {
+				for (let i = 0; i < objects.length; i++) {
+					let object = objects[i];
+					if (object != this) {
+						if (this.CheckCollision(this, object) && object.collidable) {
+							this.CheckPart(object);
+						}
 					}
 				}
 			}
-		}
-		if (this.movable) {
 			if (!this.grounded){
 				this.velocityY += gravity;
 				if (this.velocityX > this.friction / 5) {
@@ -175,7 +173,9 @@ class Object {
 	}
 
 	Move (speed) {
-		this.velocityX = speed;
+		if (this.velocityX < speed) {
+			this.velocityX += speed / 5;
+		}
 	}
 
 	Draw () {
@@ -311,6 +311,7 @@ function Start () {
 	objects.push(coin1);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
+	VelocityText2 = new Text("Velocity: " + 0, 25, 100, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
 	CoinText = new Text("Coins: " + 0, 25, 75, "left", "#212121", "20");
 
@@ -336,6 +337,8 @@ function Update () {
 		
 		VelocityText.t = "Velocity: " + player.velocityX + ", " + player.velocityY;
 		VelocityText.Draw();
+		VelocityText2.t = "Velocity2: " + movableBox.velocityX + ", " + movableBox.velocityY;
+		VelocityText2.Draw();
 		PosText.t = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
 		CoinText.t = "Coins:" + coins;
