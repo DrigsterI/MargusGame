@@ -27,105 +27,43 @@ class Object {
 		this.height = height;
 		this.color = color;
 
-		this.VelocityX = 0;
-		this.VelocityY = 0;
+		this.speed = 0;
+
+		this.movable = false;
+		this.collidable = true;
+
+		this.velocityX = 0;
+		this.velocityY = 0;
+		this.grounded = false;
 	}
 	
 	Animate () {
-/*
-		// Keys check
-		if (keys['Space'] || keys['KeyW']) {
-			this.Jump();
-		}
-		if (keys['KeyD']) {
-			this.Move(this.speed);
-		} else if (keys['KeyA']){
-			this.Move(this.speed * (-1));
-		}
-*/
 		//Physics calculation
-		this.grounded = false; // !
-		this.y += this.VelocityY;
-		this.x += this.VelocityX;
-
-		for (let i = 0; i < obstacles.length; i++) {
-			let obstacle = obstacles[i];
-			if (this.CheckCollision(player, obstacle)) {
-				this.CheckPart(obstacle); // !
+		if (this.movable) {
+			this.grounded = false;
+			this.y += this.velocityY;
+			this.x += this.velocityX;
+		}
+		if (this.collidable) {
+			for (let i = 0; i < obstacles.length; i++) {
+				let obstacle = obstacles[i];
+				if (this.CheckCollision(this, obstacle)) {
+					this.CheckPart(obstacle);
+				}
 			}
 		}
-
-		// Gravity
-		if (!this.grounded){ // !
-			this.VelocityY += gravity;
-		} else {
-			if (this.VelocityX > 0) {
-				this.VelocityX -= 0.5;
-			}else if (this.VelocityX < 0) {
-				this.VelocityX += 0.5;
-			}
-			this.VelocityY = 0;
-		}
-		/*
-		if (player.y > 5000){ // !
-			player.y = -500;
-		}
-		*/
-		this.Draw(); // !
-	}
-}
-
-
-class Player extends Object {
-	constructor (x, y, width, height, color) {
-		super(x, y, width, height, color);
-		
-		this.jumpForce = 8;
-		this.grounded = false;
-		
-		this.health = 100;
-	}
-
-	Animate () {
-
-		// Keys check
-		if (keys['Space'] || keys['KeyW']) {
-			this.Jump();
-		}
-		if (keys['KeyD']) {
-			this.Move(this.speed);
-		} else if (keys['KeyA']){
-			this.Move(this.speed * (-1));
-		}
-
-		//Physics calculation
-		this.grounded = false;
-		this.y += this.VelocityY;
-		this.x += this.VelocityX;
-
-		for (let i = 0; i < obstacles.length; i++) {
-			let obstacle = obstacles[i];
-			if (this.CheckCollision(player, obstacle)) {
-				this.CheckPart(obstacle);
+		if (this.movable) {
+			if (!this.grounded){
+				this.velocityY += gravity;
+			} else {
+				if (this.velocityX > 0) {
+					this.velocityX -= 0.5;
+				}else if (this.velocityX < 0) {
+					this.velocityX += 0.5;
+				}
+				this.velocityY = 0;
 			}
 		}
-
-		// Gravity
-		if (!this.grounded){
-			this.VelocityY += gravity;
-		} else {
-			if (this.VelocityX > 0) {
-				this.VelocityX -= 0.5;
-			}else if (this.VelocityX < 0) {
-				this.VelocityX += 0.5;
-			}
-			this.VelocityY = 0;
-		}
-
-		if (player.y > 5000){
-			player.y = -500;
-		}
-
 		this.Draw();
 	}
 
@@ -217,20 +155,86 @@ class Player extends Object {
 	}
 
 	Move (speed) {
-		this.VelocityX = speed;
+		this.velocityX = speed;
 	}
 
-	Jump () {
-		if (this.grounded) {
-			this.VelocityY = -this.jumpForce;
-		}
-	}
-	
 	Draw () {
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
 		ctx.fillRect(this.x, this.y, this.width, this.height);
 		ctx.closePath();
+	}
+}
+
+
+class Player extends Object {
+	constructor (x, y, width, height, color) {
+		super(x, y, width, height, color);
+		
+		this.jumpForce = 8;
+		this.grounded = false;
+		this.movable = true;
+		this.speed = 1.5;
+		this.health = 100;
+	}
+
+	Animate(){
+		// Keys check
+		if (keys['Space'] || keys['KeyW']) {
+			this.Jump();
+		}
+		if (keys['KeyD']) {
+			this.Move(this.speed);
+		} else if (keys['KeyA']){
+			this.Move(this.speed * (-1));
+		}
+
+		super.Animate();
+
+		if (player.y > 5000) {
+			player.y = -500;
+		}
+	}
+
+	/*Animate () {
+
+		
+
+		//Physics calculation
+		this.grounded = false;
+		this.y += this.velocityY;
+		this.x += this.velocityX;
+
+		for (let i = 0; i < obstacles.length; i++) {
+			let obstacle = obstacles[i];
+			if (this.CheckCollision(player, obstacle)) {
+				this.CheckPart(obstacle);
+			}
+		}
+
+		// Gravity
+		if (!this.grounded){
+			this.velocityY += gravity;
+		} else {
+			if (this.velocityX > 0) {
+				this.velocityX -= 0.5;
+			}else if (this.velocityX < 0) {
+				this.velocityX += 0.5;
+			}
+			this.velocityY = 0;
+		}
+
+		if (player.y > 5000){
+			player.y = -500;
+		}
+
+		this.Draw();
+	}*/
+
+	Jump () {
+		if (this.grounded) {
+			this.velocityY = -this.jumpForce;
+		}
 	}
 }
 
@@ -307,7 +311,7 @@ function Update () {
 
 	if (debug) {
 		
-		VelocityText.t = "Velocity: " + player.VelocityX + ", " + player.VelocityY;
+		VelocityText.t = "Velocity: " + player.velocityX + ", " + player.velocityY;
 		VelocityText.Draw();
 		PosText.t = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
