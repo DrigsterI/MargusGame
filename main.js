@@ -5,9 +5,12 @@ let debug = true;
 
 // Variables
 let player;
+let coins = 0; // total coins
 let gravity;
 let keys = {};
 let objects = [];
+//let coinsInGame = [];
+
 
 let VelocityText;
 
@@ -47,8 +50,9 @@ class Object {
 		if (this.collidable) {
 			for (let i = 0; i < objects.length; i++) {
 				let object = objects[i];
-				if (this.CheckCollision(this, object)) {
+				if (this.CheckCollision(this, object) && object.collidable) {
 					this.CheckPart(object);
+					
 				}
 			}
 		}
@@ -149,7 +153,7 @@ class Object {
 				this.x = object.x + object.width;
 			}
 			else {
-				this.y = object.y + this.height;
+				this.y = object.y + this.height; // mb bug
 			}
 		}
 	}
@@ -171,10 +175,10 @@ class Player extends Object {
 	constructor (x, y, width, height, color) {
 		super(x, y, width, height, color);
 		
-		this.jumpForce = 9;
+		this.jumpForce = 8;
 		this.grounded = false;
 		this.movable = true;
-		this.speed = 1.5;
+		this.speed = 4;
 		this.health = 100;
 	}
 
@@ -202,6 +206,38 @@ class Player extends Object {
 		}
 	}
 }
+
+class Coin extends Object {
+	constructor (x, y, width, height, color) {
+		super(x, y, width, height, color);
+		this.exists = true;
+		super.collidable = false;
+		
+	}
+	
+	Pick () {
+			coins++;
+			this.exists = false;
+			this.x = -100;
+			this.y = -100;
+	}
+	Animate() {
+		super.Animate();
+		for (let i = 0; i < objects.length; i++) {
+				let object = objects[i];
+				if (this.CheckCollision(this, object)) {
+					if (typeof(object) == Player){
+						coin.pick();
+					}
+					
+				}
+			}
+			
+	}
+}
+
+
+
 
 class Text {
 		constructor (t, x, y, a, c, s) {
@@ -247,9 +283,14 @@ function Start () {
 	
 	box2 = new Object(700, 760, 10, 100, '#666');
 	objects.push(box2);
-
+	
+	coin1 = new Coin (600, 700, 10, 10, '#ECFF00');
+	objects.push(coin1);
+	
+	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
+	CoinText = new Text("Coins: " + 0, 25, 75, "left", "#212121", "20");
 
 	requestAnimationFrame(Update);
 }
@@ -263,6 +304,11 @@ function Update () {
 
 		object.Draw();
 	}
+	/*for (let i = 0; i < coinsInGame.length; i++) {
+		let coin = coinsInGame[i];
+
+		coin.Draw();
+	}*/
 	player.Animate();
 
 	if (debug) {
@@ -271,6 +317,8 @@ function Update () {
 		VelocityText.Draw();
 		PosText.t = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
+		CoinText.t = "Coins:" + coins;
+		CoinText.Draw();
 	}
 }
 
