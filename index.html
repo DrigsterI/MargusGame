@@ -31,14 +31,16 @@
     </div>
     <div class="col-8">
       <center>
-        <div class="MainButtons">
-          <canvas id="canvas" style="display: block;"></canvas>
-          <canvas id="game" style="width:100% !important;"></canvas>
-          <button class="button-1"><a href="#">Тут был php 1</a></button>
-          <button class="button-1"><a href="#">Тут был php 2</a></button>
-          <button class="button-1"><a href="#">Тут был php 3</a></button>
-          <div class="ExpandAlt">
-            <a href="#"><i class="fas fa-expand-alt"></i></a>
+        <div class="border1">
+          <i class="fas fa-bars menubars" id="BackToMenuButton" onclick="BackToMenu()"></i>
+          <div class="MainButtons">
+            <canvas id="game" style="width:60% !important;visibility: hidden;"></canvas>
+            <button class="button-1" id="StartButton" onclick="StartGame()"><a href="#">Начать игру</a></button>
+            <button class="button-1" id="SecondButton"><a href="#">Тут был php 2</a></button>
+            <button class="button-1" id="ThirdButton"><a href="#">Тут был php 3</a></button>
+            <div class="ExpandAlt">
+              <a href="#"><i class="fas fa-expand-alt"></i></a>
+            </div>
           </div>
         </div>
       </center>
@@ -48,5 +50,6 @@
   </div>
 </section>
 <script src="main.js"></script>
+<script src="Menu.js"></script>
 </body>
 </html>
