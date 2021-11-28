@@ -353,7 +353,7 @@ class Spike extends Object {
 			let object = objects[i];
 			if (object != this) {
 				if (this.CheckCollision(this, object) && object.collidable) {
-					if (player.constructor === Player) {
+					if (object.constructor === Player) {
 						player.Damage(this.damage);
 					}
 				}
