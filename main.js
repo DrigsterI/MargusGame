@@ -53,7 +53,11 @@ class Object {
 					let object = objects[i];
 					if (object != this) {
 						if (this.CheckCollision(this, object) && object.collidable) {
-							this.CheckPart(object);
+							if (object.movable) {
+								this.CheckForMove(object);
+							} else {
+								this.CheckPart(object);
+							}
 						}
 					}
 				}
@@ -168,6 +172,77 @@ class Object {
 			}
 			else {
 				this.y = object.y + this.height; // mb bug
+			}
+		}
+	}
+	
+	CheckForMove (object) {
+		let x;
+		let y;
+		
+		// 1 четверть
+		if (this.x >= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2) ||
+			this.x >= ((object.x) + object.width / 2) && this.y <= ((object.y) + object.height / 2) ||
+			this.x + this.width >= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2)
+		){
+			x = ((object.x) + object.width) - this.x;
+			y = (this.y + this.height) - ((object.y));	
+		
+			if (x < y){
+				object.x -= x;
+			}
+			else {
+				this.y = object.y - this.height;
+				this.grounded = true;
+			}
+		}
+		
+		// 2 четверть
+		if (this.x + this.width <= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2) ||
+			this.x + this.width <= ((object.x) + object.width / 2) && this.y <= ((object.y) + object.height / 2) ||
+			this.x <= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2)
+		){
+			x = (this.x + this.width) - object.x;
+			y = (this.y + this. height) - object.y;
+			
+			if (x < y){
+				object.x += x;
+			}
+			else {
+				this.y = object.y - this.height;
+				this.grounded = true;
+			}   
+		}
+		
+		// 3 четверть
+		if (this.x + this.width <= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x <= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x + this.width <= ((object.x) + object.width / 2) && this.y + this.height >= ((object.y) + object.height / 2)
+		){
+			x = (this.x + this.width) - object.x;
+			y = (object.y + object.height) - this.y ;
+			
+			if (x < y){
+				object.x += x;
+			}
+			else {
+				object.y -= y;
+			}
+		}
+
+		// 4 четверть
+		if (this.x >= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x + this.width >= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x >= ((object.x) + object.width / 2) && this.y + this.height >= ((object.y) + object.height / 2)
+		){
+			x = (object.x + object.width) - this.x;
+			y = (object.y + object.height) - this.y;
+			
+			if (x < y) {
+				object.x -= x;
+			}
+			else {
+				object.y -= y;
 			}
 		}
 	}
