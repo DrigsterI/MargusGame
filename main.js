@@ -388,9 +388,12 @@ class Text {
 	}
 
 class Map {
-	constructor (file) {
-		readF
-		const data = JSON.parse();
+	constructor (mapIndex) {
+		this.map = Maps[mapIndex];
+		for (let i = 0; i < this.map.objects.length; i++) {
+			let mapObject = this.map.objects[i];
+			objects.push(mapObject);
+		}
 	}
 }
 
@@ -401,26 +404,10 @@ function Start () {
 	ctx.font = "20px sans-serif";
 	gravity = 0.2; 
 
+	map = new Map("map1");
+
 	player = new Player(400, 800, 50, 100, '#FF5858');
 	objects.push(player);
-
-	box1 = new Object(0, canvas.height - 10, canvas.width, 20, '#666');
-	objects.push(box1);
-
-	box = new Object(900, 760, 100, 200, '#666');
-	objects.push(box);
-	
-	box2 = new Object(700, 760, 10, 100, '#666');
-	objects.push(box2);
-
-	movableBox = new MovableObject(500, 500, 50, 50, '#666');
-	objects.push(movableBox);
-	
-	coin1 = new Coin (600, 800, 25, 25, '#ECFF00');
-	objects.push(coin1);
-	
-	spike = new Spike(20, 700, 20, 100, '#FF5858');
-	objects.push(spike);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	VelocityText2 = new Text("Velocity: " + 0, 25, 125, "left", "#212121", "20");
