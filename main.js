@@ -109,8 +109,8 @@ class Object {
 			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
 			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
 		){
-			x = this.x - obstacle.x;
-			y = this.y - obstacle.y;
+			x = (this.x + this.width) - obstacle.x;
+			y = (this.y + this. height) - obstacle.y;
 			
 			if (x < y){
 				this.x = obstacle.x - this.width-1;
@@ -126,8 +126,8 @@ class Object {
 			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
 			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)
 		){
-			x = this.x - obstacle.x;
-			y = (obstacle.y + obstacle.height) - (this.y + this.height);
+			x = (this.x + this.width) - obstacle.x;
+			y = (obstacle.y + obstacle.height) - this.y ;
 			
 			if (x < y){
 				this.x = obstacle.x - this.width;
@@ -171,7 +171,7 @@ class Player extends Object {
 	constructor (x, y, width, height, color) {
 		super(x, y, width, height, color);
 		
-		this.jumpForce = 8;
+		this.jumpForce = 9;
 		this.grounded = false;
 		this.movable = true;
 		this.speed = 1.5;
@@ -195,41 +195,6 @@ class Player extends Object {
 			player.y = -500;
 		}
 	}
-
-	/*Animate () {
-
-		
-
-		//Physics calculation
-		this.grounded = false;
-		this.y += this.velocityY;
-		this.x += this.velocityX;
-
-		for (let i = 0; i < obstacles.length; i++) {
-			let obstacle = obstacles[i];
-			if (this.CheckCollision(player, obstacle)) {
-				this.CheckPart(obstacle);
-			}
-		}
-
-		// Gravity
-		if (!this.grounded){
-			this.velocityY += gravity;
-		} else {
-			if (this.velocityX > 0) {
-				this.velocityX -= 0.5;
-			}else if (this.velocityX < 0) {
-				this.velocityX += 0.5;
-			}
-			this.velocityY = 0;
-		}
-
-		if (player.y > 5000){
-			player.y = -500;
-		}
-
-		this.Draw();
-	}*/
 
 	Jump () {
 		if (this.grounded) {
@@ -282,14 +247,18 @@ function Start () {
 	ctx.font = "20px sans-serif";
 	gravity = 0.2; 
 
-	player = new Player(400, 800, 50, 50, '#FF5858');
+	player = new Player(400, 800, 50, 100, '#FF5858');
 
 	//box = new Obstacle(700, 800, 20, 50, '#666');
-	box1 = new Obstacle(100, 800, 500, 50, '#666');
+	box1 = new Obstacle(0, canvas.height - 10, canvas.width, 20, '#666');
+	//box1 = new Obstacle(100, 800, 500, 50, '#666');
 	//obstacles.push(box);
 	obstacles.push(box1);
 
-	box2 = new Obstacle(700, 800, 10, 100, '#666');
+	box = new Obstacle(900, 750, 100, 100, '#666');
+	obstacles.push(box);
+	
+	box2 = new Obstacle(700, 750, 10, 100, '#666');
 	obstacles.push(box2);
 
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
