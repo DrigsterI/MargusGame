@@ -5,11 +5,11 @@ let debug = true;
 
 // Variables
 let player;
-let coins = 0; // total coins
+let coins = 0;
 let gravity;
 let keys = {};
 let objects = [];
-//let coinsInGame = [];
+
 
 
 let VelocityText;
