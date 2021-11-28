@@ -335,7 +335,6 @@ function Start () {
 	objects.push(player);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
-	VelocityText2 = new Text("Velocity: " + 0, 25, 125, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
 	CoinText = new Text("Coins: " + 0, 25, 75, "left", "#212121", "20");
 	HealthText = new Text("HP: " + 0, 25, 100, "left", "#212121", "20");
@@ -362,8 +361,6 @@ function Update () {
 		
 		VelocityText.t = "Velocity: " + player.velocityX + ", " + player.velocityY;
 		VelocityText.Draw();
-		VelocityText2.t = "Velocity2: " + movableBox.velocityX + ", " + movableBox.velocityY;
-		VelocityText2.Draw();
 		PosText.t = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
 		CoinText.t = "Coins:" + coins;
