@@ -348,7 +348,7 @@ function Start () {
 	objects.push(spike);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
-	VelocityText2 = new Text("Velocity: " + 0, 200, 25, "left", "#212121", "20");
+	VelocityText2 = new Text("Velocity: " + 0, 25, 125, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
 	CoinText = new Text("Coins: " + 0, 25, 75, "left", "#212121", "20");
 	HealthText = new Text("HP: " + 0, 25, 100, "left", "#212121", "20");
