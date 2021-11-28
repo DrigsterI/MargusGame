@@ -195,23 +195,38 @@ class Player extends Object {
 		this.movable = true;
 		this.speed = 4;
 		this.health = 100;
+		this.dead = false;
 	}
 
 	Animate(){
 		// Keys check
-		if (keys['Space'] || keys['KeyW']) {
+		if (!this.dead) {
+			if (keys['Space'] || keys['KeyW']) {
 			this.Jump();
+			}
+			if (keys['KeyD']) {
+				this.Move(this.speed);
+			} else if (keys['KeyA']){
+				this.Move(this.speed * (-1));
+			}
+		} else {
+			this.color = "#000";
 		}
-		if (keys['KeyD']) {
-			this.Move(this.speed);
-		} else if (keys['KeyA']){
-			this.Move(this.speed * (-1));
-		}
+		
 
 		super.Animate();
 
 		if (player.y > 5000) {
 			player.y = -500;
+		}
+	}
+	
+	Damage (damage) {
+		if (this.health - damage <= 0){
+			this.health = 0;
+			this.dead = true;
+		} else {
+			this.health -= damage;
 		}
 	}
 
@@ -250,6 +265,28 @@ class Coin extends Object {
 		}
 	}
 }
+
+class Spike extends Object {
+	constructor (x, y, width, height, color) {
+		super(x, y, width, height, color);
+		this.damage = 1;
+	}
+	
+	Animate() {
+		super.Animate();
+		for (let i = 0; i < objects.length; i++) {
+			let object = objects[i];
+			if (object != this) {
+				if (this.CheckCollision(this, object) && object.collidable) {
+					player.Damage(this.damage);
+				}
+			}
+		}
+	}
+}
+
+
+
 
 class MovableObject extends Object{
 	constructor (x, y, width, height, color) {
@@ -307,13 +344,17 @@ function Start () {
 	movableBox = new MovableObject(500, 500, 50, 50, '#666');
 	objects.push(movableBox);
 	
-	coin1 = new Coin (600, 800, 10, 10, '#ECFF00');
+	coin1 = new Coin (600, 800, 25, 25, '#ECFF00');
 	objects.push(coin1);
+	
+	spike = new Spike(20, 700, 20, 100, '#FF5858');
+	objects.push(spike);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	VelocityText2 = new Text("Velocity: " + 0, 25, 100, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
 	CoinText = new Text("Coins: " + 0, 25, 75, "left", "#212121", "20");
+	HealthText = new Text("HP: " + 0, 25, 100, "left", "#212121", "20");
 
 	requestAnimationFrame(Update);
 }
@@ -332,7 +373,7 @@ function Update () {
 
 		object.Animate();
 	}
-
+	
 	if (debug) {
 		
 		VelocityText.t = "Velocity: " + player.velocityX + ", " + player.velocityY;
@@ -343,5 +384,7 @@ function Update () {
 		PosText.Draw();
 		CoinText.t = "Coins:" + coins;
 		CoinText.Draw();
+		HealthText.t = "HP:" + player.health;
+		HealthText.Draw();
 	}
 }
