@@ -7,7 +7,7 @@ let debug = true;
 let player;
 let gravity;
 let keys = {};
-let obstacles = [];
+let objects = [];
 
 let VelocityText;
 
@@ -45,10 +45,10 @@ class Object {
 			this.x += this.velocityX;
 		}
 		if (this.collidable) {
-			for (let i = 0; i < obstacles.length; i++) {
-				let obstacle = obstacles[i];
-				if (this.CheckCollision(this, obstacle)) {
-					this.CheckPart(obstacle);
+			for (let i = 0; i < objects.length; i++) {
+				let object = objects[i];
+				if (this.CheckCollision(this, object)) {
+					this.CheckPart(object);
 				}
 			}
 		}
@@ -83,73 +83,73 @@ class Object {
 		return true;
 	}
 	
-	CheckPart (obstacle) {
+	CheckPart (object) {
 		let x;
 		let y;
 		
 		// 1 четверть
-		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
-			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
-			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
+		if (this.x >= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2) ||
+			this.x >= ((object.x) + object.width / 2) && this.y <= ((object.y) + object.height / 2) ||
+			this.x + this.width >= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2)
 		){
-			x = ((obstacle.x) + obstacle.width) - this.x;
-			y = (this.y + this.height) - ((obstacle.y));	
+			x = ((object.x) + object.width) - this.x;
+			y = (this.y + this.height) - ((object.y));	
 		
 			if (x < y){
-				this.x = obstacle.x + obstacle.width;
+				this.x = object.x + object.width;
 			}
 			else {
-				this.y = obstacle.y - this.height;
+				this.y = object.y - this.height;
 				this.grounded = true;
 			}
 		}
 		
 		// 2 четверть
-		if (this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
-			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
-			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
+		if (this.x + this.width <= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2) ||
+			this.x + this.width <= ((object.x) + object.width / 2) && this.y <= ((object.y) + object.height / 2) ||
+			this.x <= ((object.x) + object.width / 2) && this.y + this.height <= ((object.y) + object.height / 2)
 		){
-			x = (this.x + this.width) - obstacle.x;
-			y = (this.y + this. height) - obstacle.y;
+			x = (this.x + this.width) - object.x;
+			y = (this.y + this. height) - object.y;
 			
 			if (x < y){
-				this.x = obstacle.x - this.width-1;
+				this.x = object.x - this.width-1;
 			}
 			else {
-				this.y = obstacle.y - this.height;
+				this.y = object.y - this.height;
 				this.grounded = true;
 			}   
 		}
 		
 		// 3 четверть
-		if (this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
-			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
-			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)
+		if (this.x + this.width <= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x <= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x + this.width <= ((object.x) + object.width / 2) && this.y + this.height >= ((object.y) + object.height / 2)
 		){
-			x = (this.x + this.width) - obstacle.x;
-			y = (obstacle.y + obstacle.height) - this.y ;
+			x = (this.x + this.width) - object.x;
+			y = (object.y + object.height) - this.y ;
 			
 			if (x < y){
-				this.x = obstacle.x - this.width;
+				this.x = object.x - this.width;
 			}
 			else {
-				this.y = (obstacle.y + obstacle.height);
+				this.y = (object.y + object.height);
 			}
 		}
 
 		// 4 четверть
-		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
-			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
-			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)
+		if (this.x >= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x + this.width >= ((object.x) + object.width / 2) && this.y >= ((object.y) + object.height / 2) ||
+			this.x >= ((object.x) + object.width / 2) && this.y + this.height >= ((object.y) + object.height / 2)
 		){
-			x = (obstacle.x + obstacle.width) - this.x;
-			y = (obstacle.y + obstacle.height) - this.y;
+			x = (object.x + object.width) - this.x;
+			y = (object.y + object.height) - this.y;
 			
 			if (x < y) {
-				this.x = obstacle.x + obstacle.width;
+				this.x = object.x + object.width;
 			}
 			else {
-				this.y = obstacle.y + this.height;
+				this.y = object.y + this.height;
 			}
 		}
 	}
@@ -203,23 +203,6 @@ class Player extends Object {
 	}
 }
 
-class Obstacle {
-	constructor (x, y, width, height, color) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.color = color;
-	}
-  
-	Draw () {
-		ctx.beginPath();
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.width, this.height);
-		ctx.closePath();
-	}
-}
-
 class Text {
 		constructor (t, x, y, a, c, s) {
 			this.t = t;
@@ -240,6 +223,13 @@ class Text {
 		}
 	}
 
+class Map {
+	constructor (file) {
+		readF
+		const data = JSON.parse();
+	}
+}
+
 function Start () {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -249,17 +239,14 @@ function Start () {
 
 	player = new Player(400, 800, 50, 100, '#FF5858');
 
-	//box = new Obstacle(700, 800, 20, 50, '#666');
-	box1 = new Obstacle(0, canvas.height - 10, canvas.width, 20, '#666');
-	//box1 = new Obstacle(100, 800, 500, 50, '#666');
-	//obstacles.push(box);
-	obstacles.push(box1);
+	box1 = new Object(0, canvas.height - 10, canvas.width, 20, '#666');
+	objects.push(box1);
 
-	box = new Obstacle(900, 750, 100, 100, '#666');
-	obstacles.push(box);
+	box = new Object(900, 760, 100, 200, '#666');
+	objects.push(box);
 	
-	box2 = new Obstacle(700, 750, 10, 100, '#666');
-	obstacles.push(box2);
+	box2 = new Object(700, 760, 10, 100, '#666');
+	objects.push(box2);
 
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
@@ -271,10 +258,10 @@ function Update () {
 	requestAnimationFrame(Update);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	for (let i = 0; i < obstacles.length; i++) {
-		let obstacle = obstacles[i];
+	for (let i = 0; i < objects.length; i++) {
+		let object = objects[i];
 
-		obstacle.Draw();
+		object.Draw();
 	}
 	player.Animate();
 
