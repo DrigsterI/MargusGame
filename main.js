@@ -98,7 +98,7 @@ class Player {
 		let x;
 		let y;
 		
-		// 1 четверть // ВРОДЕ РАБОТАЕТ
+		// 1 четверть
 		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
 			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
 			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
