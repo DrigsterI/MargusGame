@@ -173,7 +173,7 @@ class Object {
 	}
 
 	Move (speed) {
-		if (this.velocityX < speed) {
+		if (this.velocityX < this.speed && this.velocityX > -this.speed) {
 			this.velocityX += speed / 5;
 		}
 	}
@@ -285,9 +285,6 @@ class Spike extends Object {
 	}
 }
 
-
-
-
 class MovableObject extends Object{
 	constructor (x, y, width, height, color) {
 		super(x, y, width, height, color);
@@ -351,7 +348,7 @@ function Start () {
 	objects.push(spike);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
-	VelocityText2 = new Text("Velocity: " + 0, 25, 100, "left", "#212121", "20");
+	VelocityText2 = new Text("Velocity: " + 0, 200, 25, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
 	CoinText = new Text("Coins: " + 0, 25, 75, "left", "#212121", "20");
 	HealthText = new Text("HP: " + 0, 25, 100, "left", "#212121", "20");
