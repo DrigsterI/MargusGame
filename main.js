@@ -192,7 +192,6 @@ class Player extends Object {
 		super(x, y, width, height, color);
 		
 		this.jumpForce = 8;
-		this.grounded = false;
 		this.movable = true;
 		this.speed = 4;
 		this.health = 100;
@@ -288,6 +287,14 @@ class Spike extends Object {
 
 
 
+
+class MovableObject extends Object{
+	constructor (x, y, width, height, color) {
+		super(x, y, width, height, color);
+		this.movable = true;
+	}
+}
+
 class Text {
 		constructor (t, x, y, a, c, s) {
 			this.t = t;
@@ -333,6 +340,9 @@ function Start () {
 	
 	box2 = new Object(700, 760, 10, 100, '#666');
 	objects.push(box2);
+
+	movableBox = new MovableObject(500, 500, 50, 50, '#666');
+	objects.push(movableBox);
 	
 	coin1 = new Coin (600, 800, 25, 25, '#ECFF00');
 	objects.push(coin1);
@@ -348,6 +358,11 @@ function Start () {
 	requestAnimationFrame(Update);
 }
 
+function Stop() {
+	objects = [];
+	cancelAnimationFrame(Update);
+}
+
 function Update () {
 	requestAnimationFrame(Update);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -361,7 +376,6 @@ function Update () {
 	if (debug) {
 		
 		VelocityText.t = "Velocity: " + player.velocityX + ", " + player.velocityY;
-		console.log(player.velocityX);
 		VelocityText.Draw();
 		PosText.t = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
@@ -371,5 +385,3 @@ function Update () {
 		HealthText.Draw();
 	}
 }
-
-Start();
