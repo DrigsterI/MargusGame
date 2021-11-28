@@ -231,10 +231,13 @@ class Coin extends Object {
 	}
 	
 	Pick () {
-			coins++;
-			this.exists = false;
-			this.x = -100;
-			this.y = -100;
+		coins++;
+		this.exists = false;
+		for( var i = 0; i < objects.length; i++){
+			if ( objects[i] == this) {
+				objects.splice(i, 1);
+			}
+		}
 	}
 	Animate() {
 		super.Animate();
