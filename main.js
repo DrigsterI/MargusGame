@@ -36,6 +36,8 @@ class Player {
 	}
 
 	Animate () {
+
+		// Keys check
 		if (keys['Space'] || keys['KeyW']) {
 			this.Jump();
 		}
@@ -43,163 +45,121 @@ class Player {
 			this.Move(this.speed);
 		} else if (keys['KeyA']){
 			this.Move(this.speed * (-1));
-		} /*else if (debug){
-			if (keys['KeyS']){ //only for debug (collision) (ZAK)
-				this.VelocityY = this.jumpForce;
-			}
-		}*/
-		
+		}
+
+		//Physics calculation
+		this.grounded = false;
 		this.y += this.VelocityY;
 		this.x += this.VelocityX;
 
-		this.CheckCollisions();
-
-		
-		// Gravity
-		if (this.y + this.height < canvas.height) {
-			this.VelocityY += gravity;
-			this.grounded = false;
-		} else {
-			this.VelocityY = 0;
-			this.grounded = true;
-			this.y = canvas.height - this.height;
+		for (let i = 0; i < obstacles.length; i++) {
+			let obstacle = obstacles[i];
+			if (this.CheckCollisions(player, obstacle)) {
+				this.CheckPart(obstacle);
+			}
 		}
 
-		this.x += this.VelocityX;
-
-		if (this.x + this.width < canvas.width && this.x > 0) {
-			if (this.VelocityX > 0) {
-				this.VelocityX -= 0.5;
-			}else if (this.VelocityX < 0) {
-				this.VelocityX += 0.5;
-			}
+		// Gravity
+		if (!this.grounded){
+			this.VelocityY += gravity;
 		} else {
-			if (this.x + this.width > canvas.width) {
-				this.VelocityX = 0;
-				this.x = canvas.width - this.width;
-			} else if (this.x < 0){
-				this.VelocityX = 0;
-				this.x = 0;
-			}
+			this.VelocityY = 0;
+		}
+
+		if (player.y > 5000){
+			player.y = -500;
 		}
 
 		this.Draw();
 	}
 
-	CheckCollisions () {
-		for (let i = 0; i < obstacles.length; i++) {
-			let obstacle = obstacles[i];
-			
-			//левый верхний угол
-			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width && this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height){
-				this.CheckPart(obstacle);
-			}
-			
-			//правый верхний угол
-			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width && this.y >= obstacle.y && this.y <= obstacle.y + obstacle.height){
-				this.CheckPart(obstacle);
-			}
-			
-			//левый нижний угол 
-			if (this.x >= obstacle.x && this.x <= obstacle.x + obstacle.width && this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height){
-				this.CheckPart(obstacle);
-			}
-			
-			//правый нижний угол
-			if (this.x + this.width >= obstacle.x && this.x + this.width <= obstacle.x + obstacle.width && this.y + this.height >= obstacle.y && this.y + this.height <= obstacle.y + obstacle.height){
-				this.CheckPart(obstacle);
-			}
+	CheckCollisions (obj1, obj2) {
+		if (obj1.x > obj2.x + obj2.width) {
+			return false;
 		}
+		if (obj1.x + obj1.width < obj2.x) {
+			return false;
+		}
+		if (obj1.y > obj2.y + obj2.height) {
+			return false;
+		}
+		if (obj1.y + obj1.height < obj2.y) {
+			return false;
+		}
+		return true;
 	}
 	
-	
 	CheckPart (obstacle) {
-		
 		let x;
 		let y;
-		
 		
 		// 1 четверть // ВРОДЕ РАБОТАЕТ
 		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
 			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
-			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)){
-				x = ((obstacle.x) + obstacle.width) - this.x;
-				y = (this.y + this.height) - ((obstacle.y));	
-			
-				if (x < y){
-					this.x = obstacle.x + obstacle.width;
-				}
-				else {
-					this.y = obstacle.y - this.height;
-					this.VelocityX = 0;
-					this.VelocityY = 0;
-				}
-			}
+			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = ((obstacle.x) + obstacle.width) - this.x;
+			y = (this.y + this.height) - ((obstacle.y));	
 		
+			if (x < y){
+				this.x = obstacle.x + obstacle.width;
+			}
+			else {
+				this.y = obstacle.y - this.height;
+				this.grounded = true;
+			}
+		}
 		
 		// 2 четверть
 		if (this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
 			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
-			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)){
-				x = this.x - obstacle.x;
-				y = this.y - obstacle.y;
-				
-				if (x < y){
-					this.x = obstacle.x - this.width-1;
-				}
-				else {
-					this.y = obstacle.y - this.height;
-					this.VelocityX = 0;
-					this.VelocityY = 0;
-				}   
+			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = this.x - obstacle.x;
+			y = this.y - obstacle.y;
+			
+			if (x < y){
+				this.x = obstacle.x - this.width-1;
 			}
-		
-
+			else {
+				this.y = obstacle.y - this.height;
+				this.grounded = true;
+			}   
+		}
 		
 		// 3 четверть
 		if (this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
 			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
-			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)){
-				x = this.x - obstacle.x;
-				y = (obstacle.y + obstacle.height) - (this.y + this.height);
-				
-				if (x < y){
-					this.x = obstacle.x - this.width;
-				}
-				else {
-					this.y = (obstacle.y + obstacle.height);
-				}
+			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = this.x - obstacle.x;
+			y = (obstacle.y + obstacle.height) - (this.y + this.height);
+			
+			if (x < y){
+				this.x = obstacle.x - this.width;
 			}
-		
+			else {
+				this.y = (obstacle.y + obstacle.height);
+			}
+		}
 
-		
 		// 4 четверть
 		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
 			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
-			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)){
-				x = (obstacle.x + obstacle.width) - this.x;
-				y = (obstacle.y + obstacle.height) - this.y;
-				
-				if (x < y) {
-					this.x = obstacle.x + obstacle.width;
-				}
-				else {
-					this.y = obstacle.y + this.height;
-				}
-				//this.VelocityX = 0; //фича
-				//this.VelocityY = 0;
+			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = (obstacle.x + obstacle.width) - this.x;
+			y = (obstacle.y + obstacle.height) - this.y;
+			
+			if (x < y) {
+				this.x = obstacle.x + obstacle.width;
 			}
-			
-			console.log("x - " + x);
-			console.log("y - " + y);
-			console.log(this.x);
-			
+			else {
+				this.y = obstacle.y + this.height;
+			}
 		}
-	
-	
-	
-	
-	
+	}
+
 	Move (speed) {
 		this.VelocityX = speed;
 	}
@@ -210,7 +170,6 @@ class Player {
 		}
 	}
 	
-
 	Draw () {
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
