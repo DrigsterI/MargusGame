@@ -29,13 +29,15 @@ class Player {
 
 		this.VelocityX = 0;
 		this.VelocityY = 0;
-		this.jumpForce = 10;
+		this.jumpForce = 8;
 		this.speed = 1.5;
 		this.grounded = false;
 		this.jumpTimer = 0;
 	}
 
 	Animate () {
+
+		// Keys check
 		if (keys['Space'] || keys['KeyW']) {
 			this.Jump();
 		}
@@ -43,48 +45,28 @@ class Player {
 			this.Move(this.speed);
 		} else if (keys['KeyA']){
 			this.Move(this.speed * (-1));
-		} /*else if (debug){
-			if (keys['KeyS']){ //only for debug (collision) (ZAK)
-				this.VelocityY = this.jumpForce;
-			}
-		}*/
-		
+		}
+
+		//Physics calculation
+		this.grounded = false;
 		this.y += this.VelocityY;
 		this.x += this.VelocityX;
 
 		for (let i = 0; i < obstacles.length; i++) {
 			let obstacle = obstacles[i];
 			if (this.CheckCollision(player, obstacle)) {
-				this.x = 200;
-				this.y = 200;
+				this.CheckPart(obstacle);
 			}
 		}
 		// Gravity
-		if (this.y + this.height < canvas.height) {
+		if (!this.grounded){
 			this.VelocityY += gravity;
-			this.grounded = false;
 		} else {
 			this.VelocityY = 0;
-			this.grounded = true;
-			this.y = canvas.height - this.height;
 		}
 
-		this.x += this.VelocityX;
-
-		if (this.x + this.width < canvas.width && this.x > 0) {
-			if (this.VelocityX > 0) {
-				this.VelocityX -= 0.5;
-			}else if (this.VelocityX < 0) {
-				this.VelocityX += 0.5;
-			}
-		} else {
-			if (this.x + this.width > canvas.width) {
-				this.VelocityX = 0;
-				this.x = canvas.width - this.width;
-			} else if (this.x < 0){
-				this.VelocityX = 0;
-				this.x = 0;
-			}
+		if (player.y > 5000){
+			player.y = -500;
 		}
 
 		this.Draw();
@@ -105,6 +87,76 @@ class Player {
 		}
 		return true;
 	}
+	
+	CheckPart (obstacle) {
+		let x;
+		let y;
+		
+		// 1 четверть // ВРОДЕ РАБОТАЕТ
+		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
+			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
+			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = ((obstacle.x) + obstacle.width) - this.x;
+			y = (this.y + this.height) - ((obstacle.y));	
+		
+			if (x < y){
+				this.x = obstacle.x + obstacle.width;
+			}
+			else {
+				this.y = obstacle.y - this.height;
+				this.grounded = true;
+			}
+		}
+		
+		// 2 четверть
+		if (this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2) ||
+			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y <= ((obstacle.y) + obstacle.height / 2) ||
+			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height <= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = this.x - obstacle.x;
+			y = this.y - obstacle.y;
+			
+			if (x < y){
+				this.x = obstacle.x - this.width-1;
+			}
+			else {
+				this.y = obstacle.y - this.height;
+				this.grounded = true;
+			}   
+		}
+		
+		// 3 четверть
+		if (this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
+			this.x <= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
+			this.x + this.width <= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = this.x - obstacle.x;
+			y = (obstacle.y + obstacle.height) - (this.y + this.height);
+			
+			if (x < y){
+				this.x = obstacle.x - this.width;
+			}
+			else {
+				this.y = (obstacle.y + obstacle.height);
+			}
+		}
+
+		// 4 четверть
+		if (this.x >= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
+			this.x + this.width >= ((obstacle.x) + obstacle.width / 2) && this.y >= ((obstacle.y) + obstacle.height / 2) ||
+			this.x >= ((obstacle.x) + obstacle.width / 2) && this.y + this.height >= ((obstacle.y) + obstacle.height / 2)
+		){
+			x = (obstacle.x + obstacle.width) - this.x;
+			y = (obstacle.y + obstacle.height) - this.y;
+			
+			if (x < y) {
+				this.x = obstacle.x + obstacle.width;
+			}
+			else {
+				this.y = obstacle.y + this.height;
+			}
+	}
 
 	Move (speed) {
 		this.VelocityX = speed;
@@ -116,7 +168,6 @@ class Player {
 		}
 	}
 	
-
 	Draw () {
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
@@ -169,10 +220,12 @@ function Start () {
 	ctx.font = "20px sans-serif";
 	gravity = 0.2; 
 
-	player = new Player(1000, 0, 50, 50, '#FF5858');
+	player = new Player(400, 800, 50, 50, '#FF5858');
 
-	box = new Obstacle(500, 800, 50, 50, '#666');
-	obstacles.push(box);
+	//box = new Obstacle(700, 800, 20, 50, '#666');
+	box1 = new Obstacle(100, 800, 500, 50, '#666');
+	//obstacles.push(box);
+	obstacles.push(box1);
 
 	box2 = new Obstacle(700, 800, 10, 100, '#666');
 	obstacles.push(box2);
