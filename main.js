@@ -58,10 +58,16 @@ class Player {
 				this.CheckPart(obstacle);
 			}
 		}
+
 		// Gravity
 		if (!this.grounded){
 			this.VelocityY += gravity;
 		} else {
+			if (this.VelocityX > 0) {
+				this.VelocityX -= 0.5;
+			}else if (this.VelocityX < 0) {
+				this.VelocityX += 0.5;
+			}
 			this.VelocityY = 0;
 		}
 
