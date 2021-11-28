@@ -156,6 +156,7 @@ class Player {
 			else {
 				this.y = obstacle.y + this.height;
 			}
+		}
 	}
 
 	Move (speed) {
