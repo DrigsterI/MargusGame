@@ -54,11 +54,10 @@ class Player {
 
 		for (let i = 0; i < obstacles.length; i++) {
 			let obstacle = obstacles[i];
-			if (this.CheckCollisions(player, obstacle)) {
+			if (this.CheckCollision(player, obstacle)) {
 				this.CheckPart(obstacle);
 			}
 		}
-
 		// Gravity
 		if (!this.grounded){
 			this.VelocityY += gravity;
@@ -73,7 +72,7 @@ class Player {
 		this.Draw();
 	}
 
-	CheckCollisions (obj1, obj2) {
+	CheckCollision (obj1, obj2) {
 		if (obj1.x > obj2.x + obj2.width) {
 			return false;
 		}
@@ -157,7 +156,6 @@ class Player {
 			else {
 				this.y = obstacle.y + this.height;
 			}
-		}
 	}
 
 	Move (speed) {
@@ -228,6 +226,9 @@ function Start () {
 	box1 = new Obstacle(100, 800, 500, 50, '#666');
 	//obstacles.push(box);
 	obstacles.push(box1);
+
+	box2 = new Obstacle(700, 800, 10, 100, '#666');
+	obstacles.push(box2);
 
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
 	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
