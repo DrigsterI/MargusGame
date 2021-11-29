@@ -1,56 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Platformer</title>
-<link rel="stylesheet" type="text/css" href="style.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-<link href="fontawesome/css/all.css" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Roboto+Mono:wght@200&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link href="fontawesome/css/all.css" rel="stylesheet">
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Roboto+Mono:wght@200&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/buttons.css">
 </head>
+
 <body>
-<section class="s1">
-    <a href="#"><i class="fas fa-cog cogsettings"></i></a>
-      <div class="dropdown">
-      <button class="dropbtn1"><i class="fas fa-flag flag"></i></button>
-      <div class="dropdown-content">
-        <a href="?ln=ru">Русский</a>
-        <a href="?ln=en">Inglesh</a>
-        <a href="?ln=et">Eesti keel</a>
+  <section class="body">
+    <div class="full-screen">
+      <div class="topmenu">
+        <i class="fas fa-cogs cogs"></i>
+        <i class="fas fa-volume-mute mute" id="volume" onclick="VolumeMute()"></i>
       </div>
-    </div>
-  <div class="row align-items-start">
-    <div class="col-2">
-      <h3 class="controller">
-      A - движение влево<br>
-      S - присесть<br>
-      D - Движение вправо<br></h3>
-    </div>
-    <div class="col-8">
-      <center>
-        <div class="border1">
-          <i class="fas fa-bars menubars" id="BackToMenuButton" onclick="BackToMenu()"></i>
-          <div class="MainButtons">
-            <canvas id="game" style="width:60% !important;visibility: hidden;"></canvas>
-            <button class="button-1" id="StartButton" onclick="StartGame()"><a href="#">Начать игру</a></button>
-            <button class="button-1" id="SecondButton"><a href="#">Тут был php 2</a></button>
-            <button class="button-1" id="ThirdButton"><a href="#">Тут был php 3</a></button>
-            <div class="ExpandAlt">
-              <a href="#"><i class="fas fa-expand-alt"></i></a>
-            </div>
+      <div class="container">
+        <h1 class="neonText">
+          Margus
+        </h1>
+        <h2 class="neonText">Game</h2>
+      </div>
+      <div class="full-screen__body">
+        <!--Button START-->
+        <a class="glitch-btn" href="#" target="_blank">
+          <div class="text"></div>
+          <div class="mask">
+            <span>Start game</span>
           </div>
+      </div></a>
+      <!--Button END-->
+      <!--Button Start-->
+      <a class="glitch-btn" style="top:43%; left:47%;" href="#" target="_blank">
+        <div class="text">Start game</div>
+        <div class="mask">
+          <span>Start game</span>
         </div>
-      </center>
+    </div></a>
+    <!--Button END-->
+    <!--Button Start-->
+    <a class="glitch-btn" style="top:48%; left:47%;" href="#" target="_blank">
+      <div class="text">Shop      </div>
+      <div class="mask">
+        <span>Shop</span>
+      </div>
+      </div>
+    </a>
+    <!--Button END-->
+    <!--Button Start-->
+    <a class="glitch-btn" style="top:53%; left:47%" href="#" target="_blank">
+      <div class="text">Levels    </div>
+      <div class="mask">
+        <span>Levels</span>
+      </div>
+      </div>
+    </a>
+    <!--Button END-->
     </div>
-    <div class="col-2">
+    <video autoplay muted loop preload="auto" class="full-screen__video" id="video-player" volume="50">
+      <source type="video/mp4" src="video/BgVideo.mp4">
+    </video>
     </div>
-  </div>
-</section>
-<script src="main.js"></script>
-<script src="Menu.js"></script>
-<script src="maps.js"></script>
+  </section>
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="main.js"></script>
+  <script src="Menu.js"></script>
+  <script src="maps.js"></script>
 </body>
+
 </html>
