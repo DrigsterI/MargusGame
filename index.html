@@ -15,8 +15,8 @@
   <link rel="stylesheet" href="css/buttons.css">
 </head>
 
-<body>
-  <section class="body">
+<body id="body">
+  <section class="firsts" id="firstsection">
     <div class="full-screen">
       <div class="topmenu">
         <i class="fas fa-cogs cogs"></i>
@@ -30,23 +30,23 @@
       </div>
       <div class="full-screen__body">
         <!--Button START-->
-        <a class="glitch-btn" href="#" target="_blank">
+        <a class="glitch-btn" style="top:33%; left:47%;" href="#" target="_blank">
           <div class="text"></div>
           <div class="mask">
-            <span>Start game</span>
+            <span></span>
           </div>
       </div></a>
       <!--Button END-->
       <!--Button Start-->
-      <a class="glitch-btn" style="top:43%; left:47%;" href="#" target="_blank">
-        <div class="text">Start game</div>
+      <a class="glitch-btn" style="top:43%; left:47%;" href="#" target="">
+        <div class="text" onclick="StartGame()">Start game</div>
         <div class="mask">
-          <span>Start game</span>
+          <span onclick="StartGame()">Start game</span>
         </div>
     </div></a>
     <!--Button END-->
     <!--Button Start-->
-    <a class="glitch-btn" style="top:48%; left:47%;" href="#" target="_blank">
+    <a class="glitch-btn" style="top:48%; left:47%;" href="#" target="">
       <div class="text">Shop      </div>
       <div class="mask">
         <span>Shop</span>
@@ -55,7 +55,7 @@
     </a>
     <!--Button END-->
     <!--Button Start-->
-    <a class="glitch-btn" style="top:53%; left:47%" href="#" target="_blank">
+    <a class="glitch-btn" style="top:53%; left:47%" href="#" target="">
       <div class="text">Levels    </div>
       <div class="mask">
         <span>Levels</span>
@@ -69,6 +69,12 @@
     </video>
     </div>
   </section>
+  <section class="secondsection" id="secondsection" style="display:none;">
+    <i class="fas fa-bars bars" onclick="BackToMenu()"></i>
+    <canvas id="game" width="100%" height="99vh"></canvas>
+  </section>
+
+
   <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="main.js"></script>
   <script src="Menu.js"></script>

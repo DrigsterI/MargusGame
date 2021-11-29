@@ -6,6 +6,9 @@
 	border: 0;
 	box-sizing: border-box;
 }
+html {
+ overflow:  hidden; 
+}
 a {
 	text-decoration: none;
 }
@@ -174,6 +177,10 @@ i{
 	font-weight: 400;
 	margin-top: -100px !important;
   }
-  audio{
-	  z-index:1;
-  }
+.bars{
+	margin:5px;
+	font-size:25px;
+}
+.secondsection{
+height:100vh;
+}
