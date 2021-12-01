@@ -392,11 +392,7 @@ class Button extends Object {
 				//console.log(object.constructor);
 				//console.log(ActiveObject);
 				if (object.constructor == ActiveObject) {
-					//console.log('end');
-					//console.log(object.x);
-					//object.activated = true;;
-					object.Activate();
-					
+					if (this.id == object.id) { object.Activate(); }
 				}
 				
 			}
@@ -417,73 +413,39 @@ class ActiveObject extends Object {
 		this.pos = false; // false - исходная позиция, true - новая позиция
 	}
 	
-	
-	
 	MoveNow() {
-		console.log(this.activated);
 		if (this.activated == true){
-			//console.log(this.pos);
 			if (this.pos == false){
-				if (this.x < this.moveX){
-					this.x += 1;
-					//console.log('move')
-				}
-				else 
-				{
-					this.x -= 1;
-					
-				}
+				if (this.x < this.moveX){ this.x += 1; }
+				else { this.x -= 1; }
 				
-				if (this.y < this.moveY){
-					this.y += 1;
-				}
-				else 
-				{
-					this.y -= 1;
-				}
+				if (this.y < this.moveY){ this.y += 1; }
+				else { this.y -= 1; }
 			}
 			else if (this.pos == true){
-				if (this.x > this.startX){
-					this.x -= 1;
-				}
-				else 
-				{
-					this.x += 1;
-					//console.log('move');
-				}
+				if (this.x > this.startX){ this.x -= 1; }
+				else { this.x += 1; }
 				
-				if (this.y > this.startY){
-					this.y -= 1;
-				}
-				else 
-				{
-					this.y += 1;
-				}	
+				if (this.y > this.startY){ this.y -= 1; }
+				else { this.y += 1; }	
 			}
 			if (this.x == this.moveX && this.y == this.moveY){
-					this.pos = true;
-					this.activated = false;
-				} else if (this.x == this.startX && this.y == this.startY){
-					this.pos = false;
-					this.activated = false;
-				}
-			
-			
+				this.pos = true;
+				this.activated = false;
+			} else if (this.x == this.startX && this.y == this.startY){
+				this.pos = false;
+				this.activated = false;
+			}
 		}
 	}
-	
 	
 	Activate(){
 		this.activated = true;
 	}
 	
-	
-	
 	Animate() {
 		super.Animate();
-		if (this.activated == true) {
-			this.MoveNow();
-		}
+		if (this.activated == true) { this.MoveNow(); }
 	}
 }
 
@@ -542,6 +504,9 @@ function Start () {
 		
 		button = new Button(600, 250, 10, 10, '#0003FF', 1);
 		objects.push(button);
+		
+		button1 = new Button(700, 250, 10, 10, '#47FF00', 2);
+		objects.push(button1);
 		
 		Aobject = new ActiveObject(200, 200, 50, 100, '#666', 1, 100, 200);
 		objects.push(Aobject);
