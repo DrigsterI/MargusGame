@@ -7,6 +7,7 @@ class Object {
 		this.color = color;
 
 		this.speed = 0;
+		this.friction = 1;
 
 		this.movable = false;
 		this.collidable = true;
@@ -21,9 +22,14 @@ class Object {
 		//Physics calculation
 		if (this.movable) {
 			this.velocityX = Math.round((this.velocityX + Number.EPSILON) * 10) / 10
+			this.velocityY = Math.round((this.velocityY + Number.EPSILON) * 10) / 10
+			this.x = Math.round(this.x);
+			this.y = Math.round(this.y);
 			this.grounded = false;
 			this.y += this.velocityY;
 			this.x += this.velocityX;
+			this.airFrictionMultiplier = 0.3;
+			this.groundFrictionMultiplier =0.5;
 			if (this.collidable) {
 				for (let i = 0; i < objects.length; i++) {
 					let object = objects[i];
@@ -40,18 +46,18 @@ class Object {
 			}
 			if (!this.grounded){
 				this.velocityY += gravity;
-				if (this.velocityX > this.friction / 5) {
-					this.velocityX -= this.friction / 5;
-				}else if (this.velocityX < -this.friction / 5) {
-					this.velocityX += this.friction / 5;
+				if (this.velocityX > this.friction * this.airFrictionMultiplier) {
+					this.velocityX -= this.friction * this.airFrictionMultiplier;
+				}else if (this.velocityX < -this.friction * this.airFrictionMultiplier) {
+					this.velocityX += this.friction * this.airFrictionMultiplier;
 				} else {
 					this.velocityX = 0;
 				}
 			} else {
-				if (this.velocityX > this.friction) {
-					this.velocityX -= this.friction;
-				}else if (this.velocityX < -this.friction) {
-					this.velocityX += this.friction;
+				if (this.velocityX > this.friction * this.groundFrictionMultiplier) {
+					this.velocityX -= this.friction * this.groundFrictionMultiplier;
+				}else if (this.velocityX < -this.friction * this.groundFrictionMultiplier) {
+					this.velocityX += this.friction * this.groundFrictionMultiplier;
 				}else{
 					this.velocityX = 0;
 				}
@@ -252,7 +258,7 @@ class Player extends Object {
 		// Keys check
 		if (!this.dead) {
 			if (keys['Space'] || keys['KeyW']) {
-			this.Jump();
+				this.Jump();
 			}
 			if (keys['KeyD']) {
 				this.Move(this.speed);
@@ -282,7 +288,9 @@ class Player extends Object {
 
 	Jump () {
 		if (this.grounded) {
-			this.velocityY = -this.jumpForce;
+			if (this.velocityY > -this.jumpForce) {
+				this.velocityY = -this.jumpForce;
+			}
 		}
 	}
 }
@@ -446,7 +454,7 @@ class Text {
 			ctx.fillText(this.t, this.x, this.y);
 			ctx.closePath();
 		}
-}
+	}
 
 class Map {
 	constructor (mapIndex) {
