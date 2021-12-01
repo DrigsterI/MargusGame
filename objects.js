@@ -224,6 +224,7 @@ class Object {
 	Move (speed) {
 		if (this.velocityX < this.speed && this.velocityX > -this.speed) {
 			this.velocityX += speed / 5;
+			this.velocityX += speed / 10;
 		}
 	}
 
@@ -283,8 +284,10 @@ class Player extends Object {
 	Jump () {
 		if (this.grounded) {
 			this.jumpCycle = 0;
+			this.jumpCycle = 1;
 			if (this.velocityY > -this.jumpForce) {
 				this.velocityY = -this.jumpForce / 10;
+				this.velocityY = -this.jumpForce / 20;
 			}
 		}
 		else{
@@ -292,6 +295,9 @@ class Player extends Object {
 				this.velocityY -= this.jumpForce / 8;
 				this.jumpCycle += 1;
 			}
+		else if (this.jumpCycle > 0 && this.jumpCycle < 15) {
+			this.jumpCycle++;
+			this.velocityY = -(this.jumpForce / 1.4) - (this.jumpCycle / 50);
 		}
 	}
 }
