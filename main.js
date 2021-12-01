@@ -362,6 +362,95 @@ class Spike extends Object {
 	}
 }
 
+class Button extends Object {
+	constructor (x, y, width, height, color, id) {
+		super(x, y, width, height, color);
+		this.id = id;
+		this.collidable = false;
+	}
+	
+	Animate() {
+		super.Animate();
+		for (let i = 0; i < objects.length; i++) {
+			let object = objects[i];
+			if (object != this) {
+				if (this.CheckCollision(this, object) && object.collidable) {
+					if (object.constructor === Player) {
+						this.ActivateObject();
+						
+					}
+				}
+			}
+		}
+	}
+	
+	ActivateObject() {
+		for (let i = 0; i < objects.length; i++) {
+			let object = objects[i];
+			if (object != this) {
+				if (object.constructor == ActiveObject) {
+					if (this.id == object.id) { object.Activate(); }
+				}
+				
+			}
+		}
+	}
+	
+}
+
+class ActiveObject extends Object {
+	constructor (x, y, width, height, color, id, moveX, moveY) {
+		super(x, y, width, height, color);
+		this.id = id;
+		this.startX = x;
+		this.startY = y;
+		this.moveX = moveX;
+		this.moveY = moveY;
+		this.activated = false; // в движении ли объект
+		this.pos = false; // false - исходная позиция, true - новая позиция
+	}
+	
+	MoveNow() {
+		if (this.activated == true){
+			if (this.pos == false){
+				if (this.x < this.moveX){ this.x += 1; }
+				else { this.x -= 1; }
+				
+				if (this.y < this.moveY){ this.y += 1; }
+				else { this.y -= 1; }
+			}
+			else if (this.pos == true){
+				if (this.x > this.startX){ this.x -= 1; }
+				else { this.x += 1; }
+				
+				if (this.y > this.startY){ this.y -= 1; }
+				else { this.y += 1; }	
+			}
+			if (this.x == this.moveX && this.y == this.moveY){
+				this.pos = true;
+				this.activated = false;
+			} else if (this.x == this.startX && this.y == this.startY){
+				this.pos = false;
+				this.activated = false;
+			}
+		}
+	}
+	
+	Activate(){
+		this.activated = true;
+	}
+	
+	Animate() {
+		super.Animate();
+		if (this.activated == true) { this.MoveNow(); }
+	}
+}
+
+
+
+
+
+
 class MovableObject extends Object{
 	constructor (x, y, width, height, color) {
 		super(x, y, width, height, color);
@@ -406,9 +495,22 @@ function Start () {
 	ctx.font = "20px sans-serif";
 	gravity = 0.2; 
 
+	if (debug){
+		object = new Object(100, 300, 1000, 20, '#666');
+		objects.push(object);
+		
+		button = new Button(600, 250, 10, 10, '#0003FF', 1);
+		objects.push(button);
+		
+		button1 = new Button(700, 250, 10, 10, '#47FF00', 2);
+		objects.push(button1);
+		
+		Aobject = new ActiveObject(200, 200, 50, 100, '#666', 1, 100, 200);
+		objects.push(Aobject);
+	}
 	map = new Map("map1");
 
-	player = new Player(900, 650, 50, 50, '#FF5858');
+	player = new Player(900, 350, 50, 50, '#FF5858');
 	objects.push(player);
 	
 	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");

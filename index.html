@@ -16,21 +16,23 @@
 </head>
 
 <body id="body">
-  <section class="firsts" id="firstsection">
+  <section class="firsts" id="firstsection" style="">
     <div class="full-screen">
       <div class="topmenu">
-        <i class="fas fa-cogs cogs"></i>
+        <i class="fas fa-cogs cogs" onclick="settings()"></i>
+        <div class="invisiblebutton" id="invisiblebutton" onclick="settingsof()"></div>
         <i class="fas fa-volume-mute mute" id="volume" onclick="VolumeMute()"></i>
       </div>
-      <div class="container">
+      <div class="container" id="neonText">
         <h1 class="neonText">
           Margus
         </h1>
         <h2 class="neonText">Game</h2>
       </div>
+      <div> 
       <div class="full-screen__body">
         <!--Button START-->
-        <a class="glitch-btn" style="top:33%; left:47%;" href="#" target="_blank">
+        <a class="glitch-btn" style="top:33%; left:47%;" href="#" id="MainInvisibleButton" target="_blank">
           <div class="text"></div>
           <div class="mask">
             <span></span>
@@ -38,7 +40,7 @@
       </div></a>
       <!--Button END-->
       <!--Button Start-->
-      <a class="glitch-btn" style="top:43%; left:47%;" href="#" target="">
+      <a class="glitch-btn" style="top:43%; left:47%;" href="#" id="MainButton1" target="">
         <div class="text" onclick="StartGame()">Start game</div>
         <div class="mask">
           <span onclick="StartGame()">Start game</span>
@@ -46,16 +48,16 @@
     </div></a>
     <!--Button END-->
     <!--Button Start-->
-    <a class="glitch-btn" style="top:48%; left:47%;" href="#" target="">
-      <div class="text">Shop      </div>
+    <a class="glitch-btn" style="top:48%; left:47%;" href="#" id="MainButton2" target="">
+      <div class="text" onclick="Shop()">Shop      </div>
       <div class="mask">
-        <span>Shop</span>
+        <span onclick="Shop()">Shop</span>
       </div>
       </div>
     </a>
     <!--Button END-->
     <!--Button Start-->
-    <a class="glitch-btn" style="top:53%; left:47%" href="#" target="">
+    <a class="glitch-btn" style="top:53%; left:47%" href="#" id="MainButton3"  target="">
       <div class="text">Levels    </div>
       <div class="mask">
         <span>Levels</span>
@@ -73,8 +75,59 @@
     <i class="fas fa-bars bars" onclick="BackToMenu()"></i>
     <canvas id="game" width="100%" height="99vh"></canvas>
   </section>
-
-
+  <section class="thirdsection" id="thirdsection" style="display: none;">
+  </section>
+<section class="shopsec" id="shop" style="display:none">
+<div class="bg">
+  <i class="fas fa-times cross" id="cross" onclick="ShopOff()"></i>
+<div class="container1">
+ <div class="row">
+    <div class="col-3">
+      <div class="card" style="width: 100%;">
+  <img src="img/skin1.png" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Red char</h5>
+    <p class="card-text">What a beautiful red skin, don't tell him what you don't like, please!</p>
+    <a href="#" class="btn btn-primary">Buy for 300 <i class="fab fa-bitcoin gold"></i> </a>
+  </div>
+</div>
+    </div>
+    <div class="col-3">
+      <div class="card" style="width: 100%;">
+  <img src="img/skinyellow.png" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Yellow char</h5>
+    <p class="card-text">What a beautiful red skin, don't tell him what you don't like, please!</p>
+    <a href="#" class="btn btn-primary">Buy for 300 <i class="fab fa-bitcoin gold"></i></a>
+  </div>
+</div>
+    </div>
+    <div class="col-3">
+      <div class="card" style="width: 100%;">
+  <img src="img/skinblue.png" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Blue char</h5>
+    <p class="card-text">What a beautiful red skin, don't tell him what you don't like, please!</p>
+    <a href="#" class="btn btn-primary">Buy for 300 <i class="fab fa-bitcoin gold"></i></a>
+  </div>
+</div>
+    </div>
+    <div class="col-3">
+      <div class="card" style="width: 100%;">
+  <img src="img/skingreen.png" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">Green char</h5>
+    <p class="card-text">What a beautiful red skin, don't tell him what you don't like, please!</p>
+    <a href="#" class="btn btn-primary">Buy for 300 <i class="fab fa-bitcoin gold"></i></a>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+</section>
+<section class="levels" id="levels" style="display:none;">
+  
+</section>
   <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="main.js"></script>
   <script src="Menu.js"></script>
