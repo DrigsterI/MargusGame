@@ -376,7 +376,6 @@ class Button extends Object {
 			if (object != this) {
 				if (this.CheckCollision(this, object) && object.collidable) {
 					if (object.constructor === Player) {
-						//console.log('preRavno');
 						this.ActivateObject();
 						
 					}
@@ -389,8 +388,6 @@ class Button extends Object {
 		for (let i = 0; i < objects.length; i++) {
 			let object = objects[i];
 			if (object != this) {
-				//console.log(object.constructor);
-				//console.log(ActiveObject);
 				if (object.constructor == ActiveObject) {
 					if (this.id == object.id) { object.Activate(); }
 				}
