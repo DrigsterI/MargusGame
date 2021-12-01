@@ -28,7 +28,7 @@ class Object {
 			this.grounded = false;
 			this.y += this.velocityY;
 			this.x += this.velocityX;
-			this.airFrictionMultiplier = 0.3;
+			this.airFrictionMultiplier = 0.35;
 			this.groundFrictionMultiplier =0.5;
 			if (this.collidable) {
 				for (let i = 0; i < objects.length; i++) {
@@ -48,7 +48,7 @@ class Object {
 				this.velocityY += gravity;
 				if (this.velocityX > this.friction * this.airFrictionMultiplier) {
 					this.velocityX -= this.friction * this.airFrictionMultiplier;
-				}else if (this.velocityX < -this.friction * this.airFrictionMultiplier) {
+				} else if (this.velocityX < -this.friction * this.airFrictionMultiplier) {
 					this.velocityX += this.friction * this.airFrictionMultiplier;
 				} else {
 					this.velocityX = 0;
@@ -56,9 +56,9 @@ class Object {
 			} else {
 				if (this.velocityX > this.friction * this.groundFrictionMultiplier) {
 					this.velocityX -= this.friction * this.groundFrictionMultiplier;
-				}else if (this.velocityX < -this.friction * this.groundFrictionMultiplier) {
+				} else if (this.velocityX < -this.friction * this.groundFrictionMultiplier) {
 					this.velocityX += this.friction * this.groundFrictionMultiplier;
-				}else{
+				} else {
 					this.velocityX = 0;
 				}
 				this.velocityY = 0;
@@ -98,8 +98,7 @@ class Object {
 			if (x < y){
 				this.x = object.x + object.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}
@@ -116,8 +115,7 @@ class Object {
 			if (x < y){
 				this.x = object.x - this.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}   
@@ -134,8 +132,7 @@ class Object {
 			if (x < y){
 				this.x = object.x - this.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = (object.y + object.height);
 			}
 		}
@@ -151,8 +148,7 @@ class Object {
 			if (x < y) {
 				this.x = object.x + object.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = (object.y + object.height); // mb bug
 			}
 		}
@@ -172,8 +168,7 @@ class Object {
 		
 			if (x < y){
 				object.x -= x;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}
@@ -189,8 +184,7 @@ class Object {
 			
 			if (x < y){
 				object.x += x;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}   
@@ -206,8 +200,7 @@ class Object {
 			
 			if (x < y){
 				object.x += x;
-			}
-			else {
+			} else {
 				object.y -= y;
 			}
 		}
@@ -222,8 +215,7 @@ class Object {
 			
 			if (x < y) {
 				object.x -= x;
-			}
-			else {
+			} else {
 				object.y -= y;
 			}
 		}
@@ -252,6 +244,8 @@ class Player extends Object {
 		this.speed = 4;
 		this.health = 100;
 		this.dead = false;
+
+		this.jumpCycle = 0;
 	}
 
 	Animate(){
@@ -288,8 +282,15 @@ class Player extends Object {
 
 	Jump () {
 		if (this.grounded) {
+			this.jumpCycle = 0;
 			if (this.velocityY > -this.jumpForce) {
-				this.velocityY = -this.jumpForce;
+				this.velocityY = -this.jumpForce / 10;
+			}
+		}
+		else{
+			if (this.jumpCycle < 8 && this.velocityY <= this.jumpForce) {
+				this.velocityY -= this.jumpForce / 8;
+				this.jumpCycle += 1;
 			}
 		}
 	}
