@@ -22,3 +22,9 @@ function settingsof(){
   document.getElementById('thirdsection').style.display = "none";
   document.getElementById('invisiblebutton').style.display = "none";
 }
+function Shop(){
+  document.getElementById('shop').style.display = "block";
+}
+function ShopOff(){
+   document.getElementById('shop').style.display = "none";
+}

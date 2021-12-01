@@ -93,7 +93,6 @@ i{
 }
 .content {
 	position: relative;
-	z-index: 5;
 	background-color: #794f45;
 }
 .content__container {
@@ -210,16 +209,42 @@ height:100vh;
 	display:none;
 	z-index: 1;
 }
-.shop{
+.shopsec{
 	height:90%;
 	width:60%;
-	background:rgba(255,255,255,0.7);
+	background:rgba(255,255,255,1);
 	position:absolute;	
 		top:5%;
 	left:20%;
+	z-index:1;
+	border-radius:5px;
 }
 .border1{
 border:2px solid black;
 position:absolute;
 
+}
+.levels{
+	position:absolute;
+	background-color:white;
+	width:60%;
+	height:70%;
+	top:15%;
+	left:20%;
+	z-index:1;
+	border-radius:5px;
+}
+.gold{
+color:	rgb(255,215,0);
+}
+.card{
+font-size:20px;
+margin-top:10%;
+}
+.cross{
+font-size:40px;
+margin-left:98%;
+}
+.cross:hover{
+color:red;
 }
