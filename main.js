@@ -30,7 +30,6 @@ function Start () {
 	if (debug){
 		object = new Object(100, 300, 1000, 20, '#666');
 		objects.push(object);
-		
 		button = new Button(600, 250, 10, 10, '#0003FF', 1);
 		objects.push(button);
 		
