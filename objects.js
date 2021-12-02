@@ -235,7 +235,7 @@ class Object {
 	Draw () {
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.width, this.height);
+		ctx.fillRect(this.x-xView, this.y-yView, this.width, this.height);
 		ctx.closePath();
 	}
 }
@@ -455,14 +455,40 @@ class MovableObject extends Object{
 
 class Camera {
 	constructor (x, y, mapSizeX, mapSizeY) {
-		this.x = x;
-		this.y = y;
+		this.x = x; //this.xView = xView || 0;
+		this.y = y; //this.yView = yView || 0;
 		this.mapSizeX = mapSizeX;
 		this.mapSizeY = mapSizeY;
+		
+		this.xDeadZone;
+		this.yDeadZone;
+		
+	    // object that should be followed
+	    this.followed = null;
 	}
 
-	Follow(object) {
-
+	Follow(object, xDeadZone, yDeadZone) {
+		this.followed = object;
+		this.xDeadZone;
+		this.yDeadZone;
+	}
+	
+	Update() {
+		if (this.followed != null) {
+			xView = this.followed.x - canvas.width/2;
+			yView = this.followed.y - canvas.height/2;
+		}
+		
+		if (!this.viewportRect.within(this.worldRect)) {
+		  if (this.viewportRect.left < this.worldRect.left)
+			this.xView = this.worldRect.left;
+		  if (this.viewportRect.top < this.worldRect.top)
+			this.yView = this.worldRect.top;
+		  if (this.viewportRect.right > this.worldRect.right)
+			this.xView = this.worldRect.right - this.wView;
+		  if (this.viewportRect.bottom > this.worldRect.bottom)
+			this.yView = this.worldRect.bottom - this.hView;
+		}
 	}
 }
 

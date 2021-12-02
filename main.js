@@ -4,6 +4,8 @@ const ctx = canvas.getContext('2d');
 let debug = true;
 
 // Variables
+let xView = 0;
+let yView = 0;
 let player;
 let coins = 0;
 let gravity;
@@ -29,7 +31,7 @@ document.addEventListener("click", function (evt) {
 function Start () {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-
+	
 	ctx.font = "20px sans-serif";
 	gravity = 0.2;
 	let fpslimit = 120;
@@ -52,6 +54,13 @@ function Start () {
 
 	player = new Player(100, 950, 50, 50, '#FF5858');
 	objects.push(player);
+	
+	var vWidth = Math.min(map.sizeX, canvas.width);
+	var vHeight = Math.min(map.sizeY, canvas.height);
+	
+	var camera = new Camera(0, 0, vWidth, vHeight, map.sizeX, map.sizeY);
+	camera.follow(player, vWidth / 2, vHeight / 2);
+	
 	
 	CoinText = new Text("Coins: " + 0, 25, 25, "left", "#212121", "20");
 	HealthText = new Text("HP: " + 0, 25, 50, "left", "#212121", "20");
@@ -86,11 +95,15 @@ function getMousePos(canvas, evt) {
 function Update () {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+	camera.Update();
+	
 	for (let i = 0; i < objects.length; i++) {
 		let object = objects[i];
 
 		object.Animate();
 	}
+	
+	
 	
 	CoinText.text = "Coins:" + coins;
 	CoinText.Draw();
