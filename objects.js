@@ -260,9 +260,23 @@ class Player extends Object {
 				this.Move(this.speed * (-1));
 			}
 		} else {
-			this.color = "#000";
+			let num1 = this.height / 10;
+			console.log(num1);
+			let num2 = this.width / 10;
+			for (let i = 0; i < num1; i++) {
+				for (let j = 0; j < num2; j++) {
+					let obj = new MovableObject(this.x + i * 10, this.y + j * 10, 10, 10, this.color = "#000");
+					obj.velocityX = this.velocityX + 3;
+					obj.velocityY = this.velocityY - 10;
+					objects.push(obj);
+				}
+			}
+			player.x = 10000;
+			player.y = 10000;
+			player.movable = false;
+			player.dead = false;
+			//objects.splice(objects.indexOf(this));
 		}
-		
 
 		super.Animate();
 
@@ -436,13 +450,13 @@ class MovableObject extends Object{
 }
 
 class Text {
-		constructor (t, x, y, a, c, s) {
-			this.t = t;
+		constructor (text, x, y, align, color, size) {
+			this.text = text;
 			this.x = x;
 			this.y = y;
-			this.a = a;
-			this.c = c;
-			this.s = s;
+			this.align = align;
+			this.color = color;
+			this.size = size;
 		}
 	
 		Draw () {
@@ -450,7 +464,7 @@ class Text {
 			ctx.fillStyle = this.c;
 			ctx.font = this.s + "px sans-serif";
 			ctx.textAlign = this.a;
-			ctx.fillText(this.t, this.x, this.y);
+			ctx.fillText(this.text, this.x, this.y);
 			ctx.closePath();
 		}
 	}
