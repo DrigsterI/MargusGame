@@ -453,6 +453,19 @@ class MovableObject extends Object{
 	}
 }
 
+class Camera {
+	constructor (x, y, mapSizeX, mapSizeY) {
+		this.x = x;
+		this.y = y;
+		this.mapSizeX = mapSizeX;
+		this.mapSizeY = mapSizeY;
+	}
+
+	Follow(object) {
+
+	}
+}
+
 class Text {
 	constructor (text, x, y, align, color, size) {
 		this.text = text;
@@ -476,6 +489,8 @@ class Text {
 class Map {
 	constructor (mapIndex) {
 		this.map = Maps[mapIndex];
+		this.sizeX = Maps[mapIndex]['sizeX'];
+		this.sizeY = Maps[mapIndex]['sizeY'];
 		for (let i = 0; i < this.map.objects.length; i++) {
 			let mapObject = this.map.objects[i];
 			objects.push(mapObject);
