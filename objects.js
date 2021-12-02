@@ -11,6 +11,7 @@ class Object {
 
 		this.movable = false;
 		this.collidable = true;
+		this.invisible = false;
 
 		this.velocityX = 0;
 		this.velocityY = 0;
@@ -233,10 +234,12 @@ class Object {
 	}
 
 	Draw () {
-		ctx.beginPath();
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x-xView, this.y-yView, this.width, this.height);
-		ctx.closePath();
+		if (!this.invisible) {
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.x, this.y, this.width, this.height);
+			ctx.closePath();
+		}
 	}
 }
 
