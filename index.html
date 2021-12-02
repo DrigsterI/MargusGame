@@ -21,7 +21,7 @@
       <div class="topmenu">
         <i class="fas fa-cogs cogs" onclick="settings()"></i>
         <div class="invisiblebutton" id="invisiblebutton" onclick="settingsof()"></div>
-        <i class="fas fa-volume-mute mute" id="volume" onclick="VolumeMute()"></i>
+        <i class="fas fa-volume-mute mute" id="muteicon" onclick="MuteButton()"></i>
       </div>
       <div class="container" id="neonText">
         <h1 class="neonText">
@@ -66,7 +66,7 @@
     </a>
     <!--Button END-->
     </div>
-    <video autoplay muted loop preload="auto" class="full-screen__video" id="video-player" volume="50">
+    <video autoplay muted loop preload="auto" class="full-screen__video" id="bgvid">
       <source type="video/mp4" src="video/BgVideo.mp4">
     </video>
     </div>
@@ -129,10 +129,10 @@
 
 </section>
   <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="main.js"></script>
-  <script src="Menu.js"></script>
-  <script src="objects.js"></script>
-  <script src="maps.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/Menu.js"></script>
+  <script src="js/objects.js"></script>
+  <script src="js/maps.js"></script>
 </body>
 
 </html>

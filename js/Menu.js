@@ -28,3 +28,16 @@ function Shop(){
 function ShopOff(){
    document.getElementById('shop').style.display = "none";
 }
+function MuteButton () {
+document.getElementById("bgvid").muted = false;
+document.getElementById('muteicon').classList.remove('fa-volume-mute');
+document.getElementById("muteicon").classList.add('fa-volume-up');
+document.getElementById("muteicon").onclick=function(){
+document.getElementById("bgvid").muted = true;
+document.getElementById('muteicon').classList.remove('fa-volume-up');
+document.getElementById("muteicon").classList.add('fa-volume-mute');
+document.getElementById("muteicon").onclick=function(){
+return MuteButton();
+    }
+  }
+}
