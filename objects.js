@@ -237,7 +237,7 @@ class Object {
 		if (!this.invisible) {
 			ctx.beginPath();
 			ctx.fillStyle = this.color;
-			ctx.fillRect(this.x, this.y, this.width, this.height);
+			ctx.fillRect(this.x - xView, this.y - yView, this.width, this.height);
 			ctx.closePath();
 		}
 	}
@@ -458,11 +458,13 @@ class MovableObject extends Object{
 
 class Camera {
 	constructor (x, y, mapSizeX, mapSizeY) {
-		this.x = x; //this.xView = xView || 0;
-		this.y = y; //this.yView = yView || 0;
+		this.x = x;
+		this.y = y;
 		this.mapSizeX = mapSizeX;
 		this.mapSizeY = mapSizeY;
 		
+		this.xView = xView || 0;
+		this.yView = yView || 0;
 		this.xDeadZone;
 		this.yDeadZone;
 		
@@ -470,27 +472,34 @@ class Camera {
 	    this.followed = null;
 	}
 
-	Follow(object, xDeadZone, yDeadZone) {
+	Follow(object) {
 		this.followed = object;
-		this.xDeadZone;
-		this.yDeadZone;
 	}
 	
 	Update() {
 		if (this.followed != null) {
-			xView = this.followed.x - canvas.width/2;
-			yView = this.followed.y - canvas.height/2;
-		}
-		
-		if (!this.viewportRect.within(this.worldRect)) {
-		  if (this.viewportRect.left < this.worldRect.left)
-			this.xView = this.worldRect.left;
-		  if (this.viewportRect.top < this.worldRect.top)
-			this.yView = this.worldRect.top;
-		  if (this.viewportRect.right > this.worldRect.right)
-			this.xView = this.worldRect.right - this.wView;
-		  if (this.viewportRect.bottom > this.worldRect.bottom)
-			this.yView = this.worldRect.bottom - this.hView;
+			if (this.mapSizeX > canvas.width) {
+				if ((this.followed.x - canvas.width / 2) < 0){
+					xView = 0;
+				} else if ((this.followed.x + canvas.width / 2) > this.mapSizeX){
+					xView = this.mapSizeX - canvas.width;
+				} else {
+					xView = this.followed.x - canvas.width / 2;
+				}
+			} else {
+				this.xView = this.mapSizeX / 2;
+			}
+			if (this.mapSizeY > canvas.height) {
+				if ((this.followed.y - canvas.height / 2) < 0){
+					yView = 0;
+				} else if ((this.followed.y + canvas.height / 2) > this.mapSizeY){
+					yView = this.mapSizeY - canvas.height;
+				} else {
+					yView = this.followed.y - canvas.height / 2;
+				}
+			} else {
+				this.yView = this.mapSizeY / 2;
+			}
 		}
 	}
 }
@@ -524,5 +533,12 @@ class Map {
 			let mapObject = this.map.objects[i];
 			objects.push(mapObject);
 		}
+	}
+
+	contains(object) {
+		return (object.x <= 0 &&
+				object.x + object.width >= this.sizeX &&
+				object.y <= 0 &&
+				object.y + object.height >= this.sizeY)
 	}
 }

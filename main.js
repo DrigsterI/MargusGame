@@ -7,6 +7,7 @@ let debug = true;
 let xView = 0;
 let yView = 0;
 let player;
+let camera;
 let coins = 0;
 let gravity;
 let keys = {};
@@ -58,9 +59,8 @@ function Start () {
 	var vWidth = Math.min(map.sizeX, canvas.width);
 	var vHeight = Math.min(map.sizeY, canvas.height);
 	
-	var camera = new Camera(0, 0, vWidth, vHeight, map.sizeX, map.sizeY);
-	camera.follow(player, vWidth / 2, vHeight / 2);
-	
+	camera = new Camera(0, 0, map.sizeX, map.sizeY);
+	camera.Follow(player, vWidth / 2, vHeight / 2);
 	
 	CoinText = new Text("Coins: " + 0, 25, 25, "left", "#212121", "20");
 	HealthText = new Text("HP: " + 0, 25, 50, "left", "#212121", "20");
@@ -103,8 +103,6 @@ function Update () {
 		object.Animate();
 	}
 	
-	
-	
 	CoinText.text = "Coins:" + coins;
 	CoinText.Draw();
 	HealthText.text = "HP:" + player.health;
@@ -114,7 +112,7 @@ function Update () {
 		VelocityText.Draw();
 		PosText.text = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
-		CursorPos.text = "CursorPos:" + mousePos.x + ", " + mousePos.y;
+		CursorPos.text = "CursorPos:" + (mousePos.x + xView) + ", " + (mousePos.y + yView);
 		CursorPos.Draw();
 		isGrounded.text = "isGrounded:" + player.grounded;
 		isGrounded.Draw();
