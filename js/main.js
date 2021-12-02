@@ -3,20 +3,28 @@ const ctx = canvas.getContext('2d');
 
 let debug = true;
 
+// Game variables
+let coins = 0;
+let level = 1;
+let levelsPassed = 0;
+
+// Object variables
+let player;
+let camera;
+let objects = [];
+
+// Pysics variables
+let gravity;
+let deltaTime;
+
 // Variables
 let xView = 0;
 let yView = 0;
-let player;
-let camera;
-let coins = 0;
-let gravity;
+
+// Other variables
 let keys = {};
-let objects = [];
 let mousePos;
 let runningId = -1;
-let deltaTime;
-
-let VelocityText;
 
 // Event Listeners
 document.addEventListener('keydown', function (evt) {
@@ -34,6 +42,7 @@ function Start () {
 	canvas.height = window.innerHeight;
 	
 	ctx.font = "20px sans-serif";
+
 	gravity = 0.2;
 	let fpslimit = 120;
 	let INTERVAL = 1000 / fpslimit;
@@ -62,11 +71,11 @@ function Start () {
 	camera = new Camera(0, 0, map.sizeX, map.sizeY);
 	camera.Follow(player, vWidth / 2, vHeight / 2);
 	
-	CoinText = new Text("Coins: " + 0, 25, 25, "left", "#212121", "20");
-	HealthText = new Text("HP: " + 0, 25, 50, "left", "#212121", "20");
-	VelocityText = new Text("Velocity: " + 0, 25, 75, "left", "#212121", "20");
-	PosText = new Text("Pos: " + 0, 25, 100, "left", "#212121", "20");
-	CursorPos = new Text("CursorPos: " + 0, 25, 125, "left", "#212121", "20");
+	coinText = new Text("Coins: " + 0, 25, 25, "left", "#212121", "20");
+	healthText = new Text("HP: " + 0, 25, 50, "left", "#212121", "20");
+	velocityText = new Text("Velocity: " + 0, 25, 75, "left", "#212121", "20");
+	posText = new Text("Pos: " + 0, 25, 100, "left", "#212121", "20");
+	cursorPos = new Text("cursorPos: " + 0, 25, 125, "left", "#212121", "20");
 	isGrounded = new Text("isGrounded: " + 0, 25, 150, "left", "#212121", "20");
 
 	if (runningId == -1) {
@@ -103,17 +112,17 @@ function Update () {
 		object.Animate();
 	}
 	
-	CoinText.text = "Coins:" + coins;
-	CoinText.Draw();
-	HealthText.text = "HP:" + player.health;
-	HealthText.Draw();
+	coinText.text = "Coins:" + coins;
+	coinText.Draw();
+	healthText.text = "HP:" + player.health;
+	healthText.Draw();
 	if (debug) {
-		VelocityText.text = "Velocity: " + player.velocityX + ", " + player.velocityY;
-		VelocityText.Draw();
-		PosText.text = "Pos: " + player.x + ", " + player.y;
-		PosText.Draw();
-		CursorPos.text = "CursorPos:" + (mousePos.x + xView) + ", " + (mousePos.y + yView);
-		CursorPos.Draw();
+		velocityText.text = "Velocity: " + player.velocityX + ", " + player.velocityY;
+		velocityText.Draw();
+		posText.text = "Pos: " + player.x + ", " + player.y;
+		posText.Draw();
+		cursorPos.text = "cursorPos:" + (mousePos.x + xView) + ", " + (mousePos.y + yView);
+		cursorPos.Draw();
 		isGrounded.text = "isGrounded:" + player.grounded;
 		isGrounded.Draw();
 	}
