@@ -21,8 +21,8 @@ class Object {
 	Animate () {
 		//Physics calculation
 		if (this.movable) {
-			this.velocityX = Math.round((this.velocityX + Number.EPSILON) * 10) / 10
-			this.velocityY = Math.round((this.velocityY + Number.EPSILON) * 10) / 10
+			this.velocityX = Math.floor((this.velocityX + Number.EPSILON) * 10) / 10
+			this.velocityY = Math.floor((this.velocityY + Number.EPSILON) * 10) / 10
 			this.x = Math.round(this.x);
 			this.y = Math.round(this.y);
 			this.grounded = false;
@@ -450,24 +450,24 @@ class MovableObject extends Object{
 }
 
 class Text {
-		constructor (text, x, y, align, color, size) {
-			this.text = text;
-			this.x = x;
-			this.y = y;
-			this.align = align;
-			this.color = color;
-			this.size = size;
-		}
-	
-		Draw () {
-			ctx.beginPath();
-			ctx.fillStyle = this.c;
-			ctx.font = this.s + "px sans-serif";
-			ctx.textAlign = this.a;
-			ctx.fillText(this.text, this.x, this.y);
-			ctx.closePath();
-		}
+	constructor (text, x, y, align, color, size) {
+		this.text = text;
+		this.x = x;
+		this.y = y;
+		this.align = align;
+		this.color = color;
+		this.size = size;
 	}
+
+	Draw () {
+		ctx.beginPath();
+		ctx.fillStyle = this.c;
+		ctx.font = this.s + "px sans-serif";
+		ctx.textAlign = this.a;
+		ctx.fillText(this.text, this.x, this.y);
+		ctx.closePath();
+	}
+}
 
 class Map {
 	constructor (mapIndex) {
