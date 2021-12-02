@@ -21,15 +21,20 @@ class Object {
 	Animate () {
 		//Physics calculation
 		if (this.movable) {
-			this.velocityX = Math.round((this.velocityX + Number.EPSILON) * 10) / 10
-			this.velocityY = Math.round((this.velocityY + Number.EPSILON) * 10) / 10
+			if (this.velocityX > 0) {
+				this.velocityX = Math.ceil((this.velocityX + Number.EPSILON) * 10) / 10;
+			}
+			else{
+				this.velocityX = Math.floor((this.velocityX + Number.EPSILON) * 10) / 10;
+			}
+			this.velocityY = Math.floor((this.velocityY + Number.EPSILON) * 10) / 10;
 			this.x = Math.round(this.x);
 			this.y = Math.round(this.y);
 			this.grounded = false;
 			this.y += this.velocityY;
 			this.x += this.velocityX;
-			this.airFrictionMultiplier = 0.3;
-			this.groundFrictionMultiplier =0.5;
+			this.airFrictionMultiplier = 0.35;
+			this.groundFrictionMultiplier = 0.5;
 			if (this.collidable) {
 				for (let i = 0; i < objects.length; i++) {
 					let object = objects[i];
@@ -48,7 +53,7 @@ class Object {
 				this.velocityY += gravity;
 				if (this.velocityX > this.friction * this.airFrictionMultiplier) {
 					this.velocityX -= this.friction * this.airFrictionMultiplier;
-				}else if (this.velocityX < -this.friction * this.airFrictionMultiplier) {
+				} else if (this.velocityX < -this.friction * this.airFrictionMultiplier) {
 					this.velocityX += this.friction * this.airFrictionMultiplier;
 				} else {
 					this.velocityX = 0;
@@ -56,9 +61,9 @@ class Object {
 			} else {
 				if (this.velocityX > this.friction * this.groundFrictionMultiplier) {
 					this.velocityX -= this.friction * this.groundFrictionMultiplier;
-				}else if (this.velocityX < -this.friction * this.groundFrictionMultiplier) {
+				} else if (this.velocityX < -this.friction * this.groundFrictionMultiplier) {
 					this.velocityX += this.friction * this.groundFrictionMultiplier;
-				}else{
+				} else {
 					this.velocityX = 0;
 				}
 				this.velocityY = 0;
@@ -98,8 +103,7 @@ class Object {
 			if (x < y){
 				this.x = object.x + object.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}
@@ -116,8 +120,7 @@ class Object {
 			if (x < y){
 				this.x = object.x - this.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}   
@@ -134,8 +137,7 @@ class Object {
 			if (x < y){
 				this.x = object.x - this.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = (object.y + object.height);
 			}
 		}
@@ -151,8 +153,7 @@ class Object {
 			if (x < y) {
 				this.x = object.x + object.width;
 				this.velocityX = 0;
-			}
-			else {
+			} else {
 				this.y = (object.y + object.height); // mb bug
 			}
 		}
@@ -172,8 +173,7 @@ class Object {
 		
 			if (x < y){
 				object.x -= x;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}
@@ -189,8 +189,7 @@ class Object {
 			
 			if (x < y){
 				object.x += x;
-			}
-			else {
+			} else {
 				this.y = object.y - this.height;
 				this.grounded = true;
 			}   
@@ -206,8 +205,7 @@ class Object {
 			
 			if (x < y){
 				object.x += x;
-			}
-			else {
+			} else {
 				object.y -= y;
 			}
 		}
@@ -222,8 +220,7 @@ class Object {
 			
 			if (x < y) {
 				object.x -= x;
-			}
-			else {
+			} else {
 				object.y -= y;
 			}
 		}
@@ -231,7 +228,7 @@ class Object {
 
 	Move (speed) {
 		if (this.velocityX < this.speed && this.velocityX > -this.speed) {
-			this.velocityX += speed / 5;
+			this.velocityX += speed * 10 * deltaTime;
 		}
 	}
 
@@ -249,9 +246,11 @@ class Player extends Object {
 		
 		this.jumpForce = 8;
 		this.movable = true;
-		this.speed = 4;
+		this.speed = 3.5;
 		this.health = 100;
 		this.dead = false;
+
+		this.jumpCycle = 0;
 	}
 
 	Animate(){
@@ -263,12 +262,25 @@ class Player extends Object {
 			if (keys['KeyD']) {
 				this.Move(this.speed);
 			} else if (keys['KeyA']){
-				this.Move(this.speed * (-1));
+				this.Move(-this.speed);
 			}
 		} else {
-			this.color = "#000";
+			let num1 = this.height / 10;
+			let num2 = this.width / 10;
+			for (let i = 0; i < num1; i++) {
+				for (let j = 0; j < num2; j++) {
+					let obj = new MovableObject(this.x + i * 10, this.y + j * 10, 10, 10, this.color = "#000");
+					obj.velocityX = this.velocityX + 3;
+					obj.velocityY = this.velocityY - 10;
+					objects.push(obj);
+				}
+			}
+			player.x = 10000;
+			player.y = 10000;
+			player.movable = false;
+			player.dead = false;
+			//objects.splice(objects.indexOf(this));
 		}
-		
 
 		super.Animate();
 
@@ -288,9 +300,14 @@ class Player extends Object {
 
 	Jump () {
 		if (this.grounded) {
+			this.jumpCycle = 1;
 			if (this.velocityY > -this.jumpForce) {
-				this.velocityY = -this.jumpForce;
+				this.velocityY = -this.jumpForce / 20;
 			}
+		}
+		else if (this.jumpCycle > 0 && this.jumpCycle < 15) {
+			this.jumpCycle++;
+			this.velocityY = -(this.jumpForce / 1.4) - (this.jumpCycle / 50);
 		}
 	}
 }
@@ -311,6 +328,7 @@ class Coin extends Object {
 			}
 		}
 	}
+
 	Animate() {
 		super.Animate();
 		for (let i = 0; i < objects.length; i++) {
@@ -378,11 +396,10 @@ class Button extends Object {
 			}
 		}
 	}
-	
 }
 
 class ActiveObject extends Object {
-	constructor (x, y, width, height, color, id, moveX, moveY) {
+	constructor (x, y, width, height, color, id, moveX, moveY, mode) {
 		super(x, y, width, height, color);
 		this.id = id;
 		this.startX = x;
@@ -391,33 +408,46 @@ class ActiveObject extends Object {
 		this.moveY = moveY;
 		this.activated = false; // в движении ли объект
 		this.pos = false; // false - исходная позиция, true - новая позиция
+		this.mode = mode;// oneMove, moveClickMove, clickMoveMove
+		this.canMove = true;
 	}
 	
 	MoveNow() {
-		if (this.activated == true){
-			if (this.pos == false){
-				if (this.x < this.moveX){ this.x += 1; }
-				else { this.x -= 1; }
-				
-				if (this.y < this.moveY){ this.y += 1; }
-				else { this.y -= 1; }
-			}
-			else if (this.pos == true){
-				if (this.x > this.startX){ this.x -= 1; }
-				else { this.x += 1; }
-				
-				if (this.y > this.startY){ this.y -= 1; }
-				else { this.y += 1; }	
-			}
-			if (this.x == this.moveX && this.y == this.moveY){
-				this.pos = true;
-				this.activated = false;
-			} else if (this.x == this.startX && this.y == this.startY){
-				this.pos = false;
-				this.activated = false;
+		if(this.canMove){
+			if (this.activated == true){
+				if (this.pos == false){
+					if (this.x < this.moveX){ this.x += 1; }
+					else { this.x -= 1; }
+					
+					if (this.y < this.moveY){ this.y += 1; }
+					else { this.y -= 1; }
+				}
+				else if (this.pos == true){
+					if (this.x > this.startX){ this.x -= 1; }
+					else { this.x += 1; }
+					
+					if (this.y > this.startY){ this.y -= 1; }
+					else { this.y += 1; }	
+				}
+				this.ModeCheck();
 			}
 		}
+		
 	}
+	
+	ModeCheck() {
+		if(this.mode == "oneMove") {
+			if (this.x == this.moveX && this.y == this.moveY){ this.canMove=false; } 
+		} else if (this.mode == "moveClickMove") { // standart
+			if (this.x == this.moveX && this.y == this.moveY){ this.pos = true;	this.activated = false; } 
+			else if (this.x == this.startX && this.y == this.startY){ this.pos = false; this.activated = false; }
+		} else if (this.mode == "clickMoveMove") {
+			if (this.x == this.moveX && this.y == this.moveY){ this.pos = true; } 
+			else if (this.x == this.startX && this.y == this.startY){ this.pos = false; this.activated = false; }
+		}
+	}
+	
+	
 	
 	Activate(){
 		this.activated = true;
@@ -437,24 +467,24 @@ class MovableObject extends Object{
 }
 
 class Text {
-		constructor (t, x, y, a, c, s) {
-			this.t = t;
-			this.x = x;
-			this.y = y;
-			this.a = a;
-			this.c = c;
-			this.s = s;
-		}
-	
-		Draw () {
-			ctx.beginPath();
-			ctx.fillStyle = this.c;
-			ctx.font = this.s + "px sans-serif";
-			ctx.textAlign = this.a;
-			ctx.fillText(this.t, this.x, this.y);
-			ctx.closePath();
-		}
+	constructor (text, x, y, align, color, size) {
+		this.text = text;
+		this.x = x;
+		this.y = y;
+		this.align = align;
+		this.color = color;
+		this.size = size;
 	}
+
+	Draw () {
+		ctx.beginPath();
+		ctx.fillStyle = this.c;
+		ctx.font = this.s + "px sans-serif";
+		ctx.textAlign = this.a;
+		ctx.fillText(this.text, this.x, this.y);
+		ctx.closePath();
+	}
+}
 
 class Map {
 	constructor (mapIndex) {
