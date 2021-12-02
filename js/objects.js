@@ -268,21 +268,20 @@ class Player extends Object {
 				this.Move(-this.speed);
 			}
 		} else {
-			let num1 = this.height / 10;
-			let num2 = this.width / 10;
+			let num1 = this.width / 10;
+			let num2 = this.height / 10;
 			for (let i = 0; i < num1; i++) {
 				for (let j = 0; j < num2; j++) {
-					let obj = new MovableObject(this.x + i * 10, this.y + j * 10, 10, 10, this.color = "#000");
-					obj.velocityX = this.velocityX + 3;
-					obj.velocityY = this.velocityY - 10;
+					let obj = new MovableObject(this.x + i * 10 - 1*(i+1), this.y + j * 10 - 1*(j+1), 10, 10, this.color = "#000");
+					obj.velocityX = this.velocityX;
+					obj.velocityY = this.velocityY;
 					objects.push(obj);
 				}
 			}
-			player.x = 10000;
-			player.y = 10000;
 			player.movable = false;
 			player.dead = false;
-			//objects.splice(objects.indexOf(this));
+			player.collidable = false;
+			player.invisible = true;
 		}
 
 		super.Animate();
