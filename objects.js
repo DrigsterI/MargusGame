@@ -399,7 +399,7 @@ class Button extends Object {
 }
 
 class ActiveObject extends Object {
-	constructor (x, y, width, height, color, id, moveX, moveY) {
+	constructor (x, y, width, height, color, id, moveX, moveY, mode) {
 		super(x, y, width, height, color);
 		this.id = id;
 		this.startX = x;
@@ -408,33 +408,46 @@ class ActiveObject extends Object {
 		this.moveY = moveY;
 		this.activated = false; // в движении ли объект
 		this.pos = false; // false - исходная позиция, true - новая позиция
+		this.mode = mode;// oneMove, moveClickMove, clickMoveMove
+		this.canMove = true;
 	}
 	
 	MoveNow() {
-		if (this.activated == true){
-			if (this.pos == false){
-				if (this.x < this.moveX){ this.x += 1; }
-				else { this.x -= 1; }
-				
-				if (this.y < this.moveY){ this.y += 1; }
-				else { this.y -= 1; }
-			}
-			else if (this.pos == true){
-				if (this.x > this.startX){ this.x -= 1; }
-				else { this.x += 1; }
-				
-				if (this.y > this.startY){ this.y -= 1; }
-				else { this.y += 1; }	
-			}
-			if (this.x == this.moveX && this.y == this.moveY){
-				this.pos = true;
-				this.activated = false;
-			} else if (this.x == this.startX && this.y == this.startY){
-				this.pos = false;
-				this.activated = false;
+		if(this.canMove){
+			if (this.activated == true){
+				if (this.pos == false){
+					if (this.x < this.moveX){ this.x += 1; }
+					else { this.x -= 1; }
+					
+					if (this.y < this.moveY){ this.y += 1; }
+					else { this.y -= 1; }
+				}
+				else if (this.pos == true){
+					if (this.x > this.startX){ this.x -= 1; }
+					else { this.x += 1; }
+					
+					if (this.y > this.startY){ this.y -= 1; }
+					else { this.y += 1; }	
+				}
+				this.ModeCheck();
 			}
 		}
+		
 	}
+	
+	ModeCheck() {
+		if(this.mode == "oneMove") {
+			if (this.x == this.moveX && this.y == this.moveY){ this.canMove=false; } 
+		} else if (this.mode == "moveClickMove") { // standart
+			if (this.x == this.moveX && this.y == this.moveY){ this.pos = true;	this.activated = false; } 
+			else if (this.x == this.startX && this.y == this.startY){ this.pos = false; this.activated = false; }
+		} else if (this.mode == "clickMoveMove") {
+			if (this.x == this.moveX && this.y == this.moveY){ this.pos = true; } 
+			else if (this.x == this.startX && this.y == this.startY){ this.pos = false; this.activated = false; }
+		}
+	}
+	
+	
 	
 	Activate(){
 		this.activated = true;
