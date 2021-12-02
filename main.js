@@ -9,7 +9,9 @@ let coins = 0;
 let gravity;
 let keys = {};
 let objects = [];
-var mousePos;
+let mousePos;
+let runningId = -1;
+let deltaTime;
 
 let VelocityText;
 
@@ -29,7 +31,10 @@ function Start () {
 	canvas.height = window.innerHeight;
 
 	ctx.font = "20px sans-serif";
-	gravity = 0.2; 
+	gravity = 0.2;
+	let fpslimit = 120;
+	let INTERVAL = 1000 / fpslimit;
+	deltaTime = INTERVAL / 1000;
 
 	if (debug){
 		object = new Object(100, 300, 1000, 20, '#666');
@@ -55,13 +60,19 @@ function Start () {
 	CursorPos = new Text("CursorPos: " + 0, 25, 125, "left", "#212121", "20");
 	isGrounded = new Text("isGrounded: " + 0, 25, 150, "left", "#212121", "20");
 
-	requestAnimationFrame(Update);
+	if (runningId == -1) {
+		runningId = setInterval(function() {
+			Update();
+		}, INTERVAL);
+	}
 }
 
 function Stop() {
 	objects = [];
 	player;
-	cancelAnimationFrame(Update);
+	map = [];
+	clearInterval(runningId);
+	runningId = -1;
 }
 
 function getMousePos(canvas, evt) {
@@ -73,7 +84,6 @@ function getMousePos(canvas, evt) {
 }
 
 function Update () {
-	requestAnimationFrame(Update);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	for (let i = 0; i < objects.length; i++) {

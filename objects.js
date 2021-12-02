@@ -21,15 +21,20 @@ class Object {
 	Animate () {
 		//Physics calculation
 		if (this.movable) {
-			this.velocityX = Math.floor((this.velocityX + Number.EPSILON) * 10) / 10
-			this.velocityY = Math.floor((this.velocityY + Number.EPSILON) * 10) / 10
+			if (this.velocityX > 0) {
+				this.velocityX = Math.ceil((this.velocityX + Number.EPSILON) * 10) / 10;
+			}
+			else{
+				this.velocityX = Math.floor((this.velocityX + Number.EPSILON) * 10) / 10;
+			}
+			this.velocityY = Math.floor((this.velocityY + Number.EPSILON) * 10) / 10;
 			this.x = Math.round(this.x);
 			this.y = Math.round(this.y);
 			this.grounded = false;
 			this.y += this.velocityY;
 			this.x += this.velocityX;
 			this.airFrictionMultiplier = 0.35;
-			this.groundFrictionMultiplier =0.5;
+			this.groundFrictionMultiplier = 0.5;
 			if (this.collidable) {
 				for (let i = 0; i < objects.length; i++) {
 					let object = objects[i];
@@ -223,7 +228,7 @@ class Object {
 
 	Move (speed) {
 		if (this.velocityX < this.speed && this.velocityX > -this.speed) {
-			this.velocityX += speed / 10;
+			this.velocityX += speed * 10 * deltaTime;
 		}
 	}
 
@@ -241,7 +246,7 @@ class Player extends Object {
 		
 		this.jumpForce = 8;
 		this.movable = true;
-		this.speed = 4;
+		this.speed = 3.5;
 		this.health = 100;
 		this.dead = false;
 
@@ -257,11 +262,10 @@ class Player extends Object {
 			if (keys['KeyD']) {
 				this.Move(this.speed);
 			} else if (keys['KeyA']){
-				this.Move(this.speed * (-1));
+				this.Move(-this.speed);
 			}
 		} else {
 			let num1 = this.height / 10;
-			console.log(num1);
 			let num2 = this.width / 10;
 			for (let i = 0; i < num1; i++) {
 				for (let j = 0; j < num2; j++) {
@@ -324,6 +328,7 @@ class Coin extends Object {
 			}
 		}
 	}
+
 	Animate() {
 		super.Animate();
 		for (let i = 0; i < objects.length; i++) {
@@ -391,7 +396,6 @@ class Button extends Object {
 			}
 		}
 	}
-	
 }
 
 class ActiveObject extends Object {
