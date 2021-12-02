@@ -24,7 +24,7 @@ let Maps = {
             new Object(780, 190, 50, 50, '#666'),
             new Object(980, 90, 50, 50, '#666'),
             new Object(1700, 30, 700, 20, '#666'),
-            new Object(1890, -30, 40, 50, '#9400D3'),
+            new Portal(1890, -30, 40, 50, '#9400D3'),
             new Object(1200, 50, 50, 50, '#666'),
             new Object(1400, 90, 50, 50, '#666'),
             new MovableObject(1200, 920, 50, 50, '#cfa685'),

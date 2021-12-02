@@ -448,6 +448,24 @@ class MovableObject extends Object{
 	}
 }
 
+class Portal extends Object{
+	constructor (x, y, width, height, color) {
+		super(x, y, width, height, color);
+		this.movable = false;
+		this.collidable = false;
+	}
+
+	Animate() {
+		super.Animate();
+		if (this.CheckCollision(this, player)) {
+			levelsPassed++;
+			winText.x = canvas.width / 2;
+			winText.y = canvas.height / 2;
+			player.color = "#00ffb4";
+		}
+	}
+}
+
 class Camera {
 	constructor (x, y, mapSizeX, mapSizeY) {
 		this.x = x;
