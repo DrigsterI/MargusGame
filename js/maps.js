@@ -1,5 +1,7 @@
 let Maps = {
     map1: {
+        sizeX: 2500,
+        sizeY: 1500,
         objects: [
             new Object(0,  960, 2000, 20, '#666'),
             new Object(900, 760, 100, 200, '#666'),

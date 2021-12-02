@@ -11,6 +11,7 @@ class Object {
 
 		this.movable = false;
 		this.collidable = true;
+		this.invisible = false;
 
 		this.velocityX = 0;
 		this.velocityY = 0;
@@ -233,10 +234,12 @@ class Object {
 	}
 
 	Draw () {
-		ctx.beginPath();
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.width, this.height);
-		ctx.closePath();
+		if (!this.invisible) {
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.x - xView, this.y - yView, this.width, this.height);
+			ctx.closePath();
+		}
 	}
 }
 
@@ -466,6 +469,54 @@ class MovableObject extends Object{
 	}
 }
 
+class Camera {
+	constructor (x, y, mapSizeX, mapSizeY) {
+		this.x = x;
+		this.y = y;
+		this.mapSizeX = mapSizeX;
+		this.mapSizeY = mapSizeY;
+		
+		this.xView = xView || 0;
+		this.yView = yView || 0;
+		this.xDeadZone;
+		this.yDeadZone;
+		
+	    // object that should be followed
+	    this.followed = null;
+	}
+
+	Follow(object) {
+		this.followed = object;
+	}
+	
+	Update() {
+		if (this.followed != null) {
+			if (this.mapSizeX > canvas.width) {
+				if ((this.followed.x - canvas.width / 2) < 0){
+					xView = 0;
+				} else if ((this.followed.x + canvas.width / 2) > this.mapSizeX){
+					xView = this.mapSizeX - canvas.width;
+				} else {
+					xView = this.followed.x - canvas.width / 2;
+				}
+			} else {
+				this.xView = this.mapSizeX / 2;
+			}
+			if (this.mapSizeY > canvas.height) {
+				if ((this.followed.y - canvas.height / 2) < 0){
+					yView = 0;
+				} else if ((this.followed.y + canvas.height / 2) > this.mapSizeY){
+					yView = this.mapSizeY - canvas.height;
+				} else {
+					yView = this.followed.y - canvas.height / 2;
+				}
+			} else {
+				this.yView = this.mapSizeY / 2;
+			}
+		}
+	}
+}
+
 class Text {
 	constructor (text, x, y, align, color, size) {
 		this.text = text;
@@ -489,9 +540,18 @@ class Text {
 class Map {
 	constructor (mapIndex) {
 		this.map = Maps[mapIndex];
+		this.sizeX = Maps[mapIndex]['sizeX'];
+		this.sizeY = Maps[mapIndex]['sizeY'];
 		for (let i = 0; i < this.map.objects.length; i++) {
 			let mapObject = this.map.objects[i];
 			objects.push(mapObject);
 		}
+	}
+
+	contains(object) {
+		return (object.x <= 0 &&
+				object.x + object.width >= this.sizeX &&
+				object.y <= 0 &&
+				object.y + object.height >= this.sizeY)
 	}
 }
