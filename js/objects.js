@@ -333,13 +333,8 @@ class Coin extends Object {
 
 	Animate() {
 		super.Animate();
-		for (let i = 0; i < objects.length; i++) {
-			let object = objects[i];
-			if (object != this) {
-				if (this.CheckCollision(this, object) && object.collidable) {
-					this.Pick();
-				}
-			}
+		if (this.CheckCollision(this, player)) {
+			this.Pick();
 		}
 	}
 }
@@ -352,15 +347,8 @@ class Spike extends Object {
 	
 	Animate() {
 		super.Animate();
-		for (let i = 0; i < objects.length; i++) {
-			let object = objects[i];
-			if (object != this) {
-				if (this.CheckCollision(this, object) && object.collidable) {
-					if (object.constructor === Player) {
-						player.Damage(this.damage);
-					}
-				}
-			}
+		if (this.CheckCollision(this, player)) {
+			player.Damage(this.damage);
 		}
 	}
 }
@@ -374,16 +362,8 @@ class Button extends Object {
 	
 	Animate() {
 		super.Animate();
-		for (let i = 0; i < objects.length; i++) {
-			let object = objects[i];
-			if (object != this) {
-				if (this.CheckCollision(this, object) && object.collidable) {
-					if (object.constructor === Player) {
-						this.ActivateObject();
-						
-					}
-				}
-			}
+		if (this.CheckCollision(this, player)) {
+			this.ActivateObject();
 		}
 	}
 	
@@ -528,9 +508,9 @@ class Text {
 
 	Draw () {
 		ctx.beginPath();
-		ctx.fillStyle = this.c;
-		ctx.font = this.s + "px sans-serif";
-		ctx.textAlign = this.a;
+		ctx.fillStyle = this.color;
+		ctx.font = this.size + "px sans-serif";
+		ctx.textAlign = this.align;
 		ctx.fillText(this.text, this.x, this.y);
 		ctx.closePath();
 	}
