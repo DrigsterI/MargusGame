@@ -48,6 +48,8 @@ function Start () {
 	let INTERVAL = 1000 / fpslimit;
 	deltaTime = INTERVAL / 1000;
 
+	level = levelsPassed + 1;
+
 	if (debug){
 		object = new Object(100, 300, 1000, 20, '#666');
 		//objects.push(object);
@@ -60,7 +62,7 @@ function Start () {
 		Aobject = new ActiveObject(200, 200, 50, 100, '#666', 1, 100, 200);
 		//objects.push(Aobject);
 	}
-	map = new Map("map1");
+	map = new Map("map" + level);
 
 	player = new Player(100, 950, 50, 50, '#FF5858');
 	objects.push(player);
@@ -77,6 +79,7 @@ function Start () {
 	posText = new Text("Pos: " + 0, 25, 100, "left", "#212121", "20");
 	cursorPos = new Text("cursorPos: " + 0, 25, 125, "left", "#212121", "20");
 	isGrounded = new Text("isGrounded: " + 0, 25, 150, "left", "#212121", "20");
+	winText = new Text("Level Passed", -500, -500, "center", "#00ffb4", "120");
 
 	if (runningId == -1) {
 		runningId = setInterval(function() {
@@ -126,4 +129,5 @@ function Update () {
 		isGrounded.text = "isGrounded:" + player.grounded;
 		isGrounded.Draw();
 	}
+	winText.Draw();
 }
