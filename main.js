@@ -9,6 +9,7 @@ let coins = 0;
 let gravity;
 let keys = {};
 let objects = [];
+var mousePos;
 
 let VelocityText;
 
@@ -19,6 +20,9 @@ document.addEventListener('keydown', function (evt) {
 document.addEventListener('keyup', function (evt) {
 	keys[evt.code] = false;
 });
+document.addEventListener("click", function (evt) {
+    mousePos = getMousePos(canvas, evt);
+}, false);
 
 function Start () {
 	canvas.width = window.innerWidth;
@@ -29,25 +33,27 @@ function Start () {
 
 	if (debug){
 		object = new Object(100, 300, 1000, 20, '#666');
-		objects.push(object);
+		//objects.push(object);
 		button = new Button(600, 250, 10, 10, '#0003FF', 1);
-		objects.push(button);
+		//objects.push(button);
 		
 		button1 = new Button(700, 250, 10, 10, '#47FF00', 2);
-		objects.push(button1);
+		//objects.push(button1);
 		
 		Aobject = new ActiveObject(200, 200, 50, 100, '#666', 1, 100, 200);
-		objects.push(Aobject);
+		//objects.push(Aobject);
 	}
 	map = new Map("map1");
 
 	player = new Player(100, 950, 50, 50, '#FF5858');
 	objects.push(player);
 	
-	VelocityText = new Text("Velocity: " + 0, 25, 25, "left", "#212121", "20");
-	PosText = new Text("Pos: " + 0, 25, 50, "left", "#212121", "20");
-	CoinText = new Text("Coins: " + 0, 25, 75, "left", "#212121", "20");
-	HealthText = new Text("HP: " + 0, 25, 100, "left", "#212121", "20");
+	CoinText = new Text("Coins: " + 0, 25, 25, "left", "#212121", "20");
+	HealthText = new Text("HP: " + 0, 25, 50, "left", "#212121", "20");
+	VelocityText = new Text("Velocity: " + 0, 25, 75, "left", "#212121", "20");
+	PosText = new Text("Pos: " + 0, 25, 100, "left", "#212121", "20");
+	CursorPos = new Text("CursorPos: " + 0, 25, 125, "left", "#212121", "20");
+	isGrounded = new Text("isGrounded: " + 0, 25, 150, "left", "#212121", "20");
 
 	requestAnimationFrame(Update);
 }
@@ -56,6 +62,14 @@ function Stop() {
 	objects = [];
 	player;
 	cancelAnimationFrame(Update);
+}
+
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
 }
 
 function Update () {
@@ -68,15 +82,18 @@ function Update () {
 		object.Animate();
 	}
 	
+	CoinText.text = "Coins:" + coins;
+	CoinText.Draw();
+	HealthText.text = "HP:" + player.health;
+	HealthText.Draw();
 	if (debug) {
-		
-		VelocityText.t = "Velocity: " + player.velocityX + ", " + player.velocityY;
+		VelocityText.text = "Velocity: " + player.velocityX + ", " + player.velocityY;
 		VelocityText.Draw();
-		PosText.t = "Pos: " + player.x + ", " + player.y;
+		PosText.text = "Pos: " + player.x + ", " + player.y;
 		PosText.Draw();
-		CoinText.t = "Coins:" + coins;
-		CoinText.Draw();
-		HealthText.t = "HP:" + player.health;
-		HealthText.Draw();
+		CursorPos.text = "CursorPos:" + mousePos.x + ", " + mousePos.y;
+		CursorPos.Draw();
+		isGrounded.text = "isGrounded:" + player.grounded;
+		isGrounded.Draw();
 	}
 }
