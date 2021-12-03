@@ -333,7 +333,7 @@ class Coin extends Object {
 
 	Animate() {
 		super.Animate();
-		if (this.CheckCollision(this, player)) {
+		if (this.CheckCollision(this, player) && player.collidable) {
 			this.Pick();
 		}
 	}
@@ -347,7 +347,7 @@ class Spike extends Object {
 	
 	Animate() {
 		super.Animate();
-		if (this.CheckCollision(this, player)) {
+		if (this.CheckCollision(this, player) && player.collidable) {
 			player.Damage(this.damage);
 		}
 	}
@@ -362,7 +362,7 @@ class Button extends Object {
 	
 	Animate() {
 		super.Animate();
-		if (this.CheckCollision(this, player)) {
+		if (this.CheckCollision(this, player) && player.collidable) {
 			this.ActivateObject();
 		}
 	}
@@ -457,7 +457,7 @@ class Portal extends Object{
 
 	Animate() {
 		super.Animate();
-		if (this.CheckCollision(this, player)) {
+		if (this.CheckCollision(this, player) && player.collidable) {
 			levelsPassed++;
 			winText.x = canvas.width / 2;
 			winText.y = canvas.height / 2;
